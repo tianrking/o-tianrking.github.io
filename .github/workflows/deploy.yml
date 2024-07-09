@@ -3,7 +3,7 @@ name: Deploy
 on:
   push:
     branches:
-      - v3.4
+      - V3.4
       
     paths-ignore:
       - "ISSUE_TEMPLATE/**"
