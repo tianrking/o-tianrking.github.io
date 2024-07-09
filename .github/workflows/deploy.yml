@@ -14,8 +14,8 @@ on:
       - "HOW_TO.md"
       - "TASK.md"
       - "SECURITY.md"
-      - "README.md"
-      - "README_zh-CN.md"
+      # - "README.md"
+      # - "README_zh-CN.md"
       
   schedule:
     #UTC 0 
