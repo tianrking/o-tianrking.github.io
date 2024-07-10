@@ -14,3 +14,15 @@ hola:
   label: Hola
   permalink: /hola
   description: Hola tag description
+
+
+misc:
+  label: Misc
+Linux:
+  label: Linux 
+Docker:
+  label: Docker
+軟件:
+  label: 軟件
+機器學習:
+  label: 機器學習

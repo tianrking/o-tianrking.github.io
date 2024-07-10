@@ -67,8 +67,10 @@ const config = {
 
         docs: {
           sidebarPath: './sidebars.js',
+          routeBasePath: '/',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
+          showLastUpdateTime: true,
           editUrl:
             'https://github.com/tianrking/tianrking.github.io/tree/V3.4/',
         },
@@ -82,6 +84,7 @@ const config = {
         theme: {
           customCss: './src/css/custom.css',
         },
+        
       }),
     ],
   ],

@@ -19,14 +19,47 @@ const sidebars = {
   // But you can create a sidebar manually
   
   tutorialSidebar: [
-    // 'intro',
-    // 'hello',
+    {
+      type: 'doc',
+      id: 'tutorial',
+      label: 'Tutorial',
+    },
     {
       type: 'category',
-      label: 'Tutorial',
-      items: ['tutorial-basics/create-a-document'],
-    },
-  ],
+      label: 'Micro-Controladores',
+      items: [
+        {
+          type: 'category',
+          label: 'STM32',
+          items: [
+            'micro-controladores/STM32/stm32_cdc_develop'
+          ]
+        },
+        {
+            type: 'category',
+            label: 'ESP32',
+            items: [
+              {
+                type: 'link',
+                label: ' ',
+                href: '#'
+              }
+            ]
+        },
+        {
+            type: 'category',
+            label: 'RP2040',
+            items: [
+              {
+                type: 'link',
+                label: ' ',
+                href: '#'
+              }
+            ]
+        }
+      ]
+    }
+  ]
    
 };
 

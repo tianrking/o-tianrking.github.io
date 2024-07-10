@@ -3567,6 +3567,11 @@ dns-packet@^5.2.2:
   dependencies:
     "@leichtgewicht/ip-codec" "^2.0.1"
 
+docusaurus-plugin-name@^0.0.1-security.6:
+  version "0.0.1-security.6"
+  resolved "https://registry.yarnpkg.com/docusaurus-plugin-name/-/docusaurus-plugin-name-0.0.1-security.6.tgz#5d14ffef40434307d68795053aae80ceee7d085e"
+  integrity sha512-WDvbc6Gg85gGzI4w/kq8g9RNaKmtYjIpp/h1Hnkg7rdnfOZa13ztdMAMK9fNI4lU+1iILPBFMqrj0nP7InWwkw==
+
 dom-converter@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/dom-converter/-/dom-converter-0.2.0.tgz#6721a9daee2e293682955b6afe416771627bb768"

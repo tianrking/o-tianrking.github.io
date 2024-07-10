@@ -22,7 +22,7 @@ function HomepageHeader() {
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
-            to="/blog">
+            to="/tutorial">
             👉 ¡Descubre El Jardín Secreto de w0x7ce! 👈
           </Link>
         </div>
