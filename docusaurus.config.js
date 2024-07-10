@@ -20,8 +20,8 @@ const config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'tianrking', // Usually your GitHub org/user name.
+  projectName: 'tianrking.github.io', // Usually your repo name.
 
   // onBrokenLinks: 'throw',
   onBrokenLinks: 'ignore',
@@ -33,6 +33,30 @@ const config = {
   i18n: {
     defaultLocale: 'es',
     locales: ['es','zh-hk','en'],
+    path: 'i18n',
+    localeConfigs: {
+      es: {
+        label: 'Español',
+        direction: 'ltr',
+        htmlLang: 'es-ES',
+        calendar: 'gregory',
+        path: 'es',
+      },
+      'zh-hk': {
+        label: '繁體中文',
+        direction: 'ltr',
+        htmlLang: 'zh-HK',
+        calendar: 'gregory',
+        path: 'zh-hk',
+      },
+      en: {
+        label: 'English',
+        direction: 'ltr',
+        htmlLang: 'en-US',
+        calendar: 'gregory',
+        path: 'en',
+      },
+    },
   },
 
   presets: [
@@ -40,19 +64,20 @@ const config = {
       'classic',
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
+
         docs: {
           sidebarPath: './sidebars.js',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/tianrking/tianrking.github.io/tree/V3.4/',
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/tianrking/tianrking.github.io/tree/V3.4/',
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -132,7 +157,7 @@ const config = {
               },
               {
                 label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
+                href: 'https://github.com/tianrking/tianrking.github.io',
               },
             ],
           },
