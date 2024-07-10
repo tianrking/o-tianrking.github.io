@@ -5,6 +5,5 @@ yarn swizzle --list
 
 yarn swizzle @docusaurus/theme-classic Footer --wrap
 
-
 yarn swizzle @docusaurus/theme-classic Footer --eject
 
