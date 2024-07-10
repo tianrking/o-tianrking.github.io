@@ -10,7 +10,8 @@ import styles from './index.module.css';
 function HomepageHeader() {
   const {siteConfig} = useDocusaurusContext();
   return (
-    <header className={clsx('hero hero--primary', styles.heroBanner)}>
+    // <header className={clsx('hero hero--primary', styles.heroBanner)}>
+    <header className={clsx('hero', styles.heroBanner, styles.heroSecretGarden)}>
       <div className="container">
         <Heading as="h1" className="hero__title">
           {siteConfig.title}
@@ -35,7 +36,7 @@ export default function Home() {
       title={`Hello from ${siteConfig.title}`}
       description="El_Jardin_Secreto_de_w0x7ce<head />">
       <HomepageHeader />
-      <main>
+      <main className={styles.mainContent}>
         <HomepageFeatures />
       </main>
     </Layout>

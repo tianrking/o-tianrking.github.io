@@ -21,3 +21,18 @@
   align-items: center;
   justify-content: center;
 }
+
+/*DIY */
+.heroSecretGarden {
+  background-color: #45f76b; /* 柔和的棕色 */
+  /*background-image: url('/img/secret-garden-bg.jpg');  使用一张秘密花园的背景图片 */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.mainContent {
+  background-color: #12af1f; /* 浅灰色背景 */
+  padding: 0;
+}
+

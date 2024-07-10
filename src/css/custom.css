@@ -28,3 +28,19 @@
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+/*custom color*/
+/* 覆盖 Infima 的 footer 样式 */
+footer.footer {
+  background-color: #34c759; /* 绿色背景 */
+  color: #1b200f; /* 浅色文字 */
+  padding: 2rem 0;
+}
+
+footer.footer a {
+  color: #140e0e; /* 链接文字颜色 */
+}
+
+footer.footer a:hover {
+  color: #ffffff; /* 链接悬停颜色 */
+}
