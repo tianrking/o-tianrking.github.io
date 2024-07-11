@@ -54,7 +54,9 @@ const sidebars = {
                 type: 'link',
                 label: ' ',
                 href: '#'
-              }
+              },
+              'micro-controladores/RP2040/mastering-pio-programming',
+              'micro-controladores/RP2040/pio-uart-implementation'
             ]
         }
       ]
