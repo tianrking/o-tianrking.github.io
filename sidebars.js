@@ -27,10 +27,12 @@ const sidebars = {
     {
       type: 'category',
       label: 'Micro-Controladores',
+      collapsed: false,
       items: [
         {
           type: 'category',
           label: 'STM32',
+          collapsed: false,
           items: [
             'micro-controladores/STM32/stm32_cdc_develop'
           ]
@@ -38,6 +40,7 @@ const sidebars = {
         {
             type: 'category',
             label: 'ESP32',
+            collapsed: false,
             items: [
               {
                 type: 'link',
@@ -49,12 +52,16 @@ const sidebars = {
         {
             type: 'category',
             label: 'RP2040',
+            collapsed: false,
             items: [
               {
                 type: 'link',
                 label: ' ',
                 href: '#'
               },
+              'micro-controladores/RP2040/rp2040-uart-interrupt-handling-and-usage',
+              'micro-controladores/RP2040/rp2040-pwm-usage-and-examples',
+              'micro-controladores/RP2040/rp2040-timer-and-alarm-usage',
               'micro-controladores/RP2040/mastering-pio-programming',
               'micro-controladores/RP2040/pio-uart-implementation',
               'micro-controladores/RP2040/advanced-pio-led-control-and-resource-management'
