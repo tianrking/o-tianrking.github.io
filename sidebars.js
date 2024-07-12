@@ -56,7 +56,8 @@ const sidebars = {
                 href: '#'
               },
               'micro-controladores/RP2040/mastering-pio-programming',
-              'micro-controladores/RP2040/pio-uart-implementation'
+              'micro-controladores/RP2040/pio-uart-implementation',
+              'micro-controladores/RP2040/advanced-pio-led-control-and-resource-management'
             ]
         }
       ]
