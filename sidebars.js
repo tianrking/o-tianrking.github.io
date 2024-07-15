@@ -46,7 +46,8 @@ const sidebars = {
                 type: 'link',
                 label: ' ',
                 href: '#'
-              }
+              },
+              'micro-controladores/ESP32/esp32-rf24-demo'
             ]
         },
         {
@@ -64,7 +65,8 @@ const sidebars = {
               'micro-controladores/RP2040/rp2040-timer-and-alarm-usage',
               'micro-controladores/RP2040/mastering-pio-programming',
               'micro-controladores/RP2040/pio-uart-implementation',
-              'micro-controladores/RP2040/advanced-pio-led-control-and-resource-management'
+              'micro-controladores/RP2040/advanced-pio-led-control-and-resource-management',
+              'micro-controladores/RP2040/rp2040-rf24-demo'
             ]
         }
       ]
