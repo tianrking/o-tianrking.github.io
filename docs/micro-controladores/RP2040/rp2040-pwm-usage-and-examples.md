@@ -137,90 +137,100 @@ int main() {
 
 ## 程序示例 2: 使用 PWM 控制 LED 亮度
 
-接下來,讓我們看一個更實用的例子,演示如何使用 PWM 控制 LED 的亮度:
+接下來,讓我們看一個更實用的例子,演示如何用一個切片的兩個通道輸出頻率一致占空比不同的pwm波形:  
 
-```c
+```c 
 #include "pico/stdlib.h"
-#include <stdio.h>
-#include "pico/time.h"
-#include "hardware/irq.h"
 #include "hardware/pwm.h"
 
-#ifdef PICO_DEFAULT_LED_PIN
-void on_pwm_wrap() {
-    static int fade = 0;
-    static bool going_up = true;
-
-    // 清除中斷標誌
-    pwm_clear_irq(pwm_gpio_to_slice_num(PICO_DEFAULT_LED_PIN));
-
-    if (going_up) {
-        ++fade;
-        if (fade > 255) {
-            fade = 255;
-            going_up = false;
-        }
-    } else {
-        --fade;
-        if (fade < 0) {
-            fade = 0;
-            going_up = true;
-        }
-    }
-
-    // 將 fade 值平方,使 LED 的亮度看起來更加線性
-    // 注意,這個範圍與 wrap 值匹配
-    pwm_set_gpio_level(PICO_DEFAULT_LED_PIN, fade * fade);
-}
-#endif
+// PWM 參數
+#define PWM_FREQ 1000 // PWM 頻率為 1kHz
+#define PWM_DUTY_CYCLE 30 // PWM 占空比為 30%
 
 int main() {
-#ifndef PICO_DEFAULT_LED_PIN
-#warning pwm/led_fade example requires a board with a regular LED
-#else
-    // 告訴 LED 引腳,PWM 負責控制其值
-    gpio_set_function(PICO_DEFAULT_LED_PIN, GPIO_FUNC_PWM);
+    // 選擇要使用的GPIO
+    const uint GPIO0 = 0; // 使用 GPIO 0
+    const uint GPIO1 = 1; // 使用 GPIO 1
 
-    // 找到連接到 LED 引腳的 PWM 切片編號
-    uint slice_num = pwm_gpio_to_slice_num(PICO_DEFAULT_LED_PIN);
+    // 將GPIO設置為PWM功能
+    gpio_set_function(GPIO0, GPIO_FUNC_PWM); // 將 GPIO 0 設置為 PWM 功能
+    gpio_set_function(GPIO1, GPIO_FUNC_PWM); // 將 GPIO 1 設置為 PWM 功能
 
-    // 將我們的切片的 IRQ 輸出遮罩到 PWM 塊的單個中斷線,
-    // 並註冊我們的中斷處理程序
-    pwm_clear_irq(slice_num);
-    pwm_set_irq_enabled(slice_num, true);
-    irq_set_exclusive_handler(PWM_IRQ_WRAP, on_pwm_wrap);
-    irq_set_enabled(PWM_IRQ_WRAP, true);
+    // 找到PWM切片
+    uint slice_num = pwm_gpio_to_slice_num(GPIO0); // 獲取 GPIO 0 對應的 PWM 切片編號
 
-    // 為切片配置獲取一些合理的預設值
-    // 預設情況下,計數器可以在其最大範圍（0 到 2^16-1）內包裹
+    // 配置PWM
+    pwm_config config = pwm_get_default_config(); // 獲取 PWM 的默認配置
+    // 設置分頻器,以確定頻率
+    // 系統時鐘頻率為125MHz,頻率 = 125MHz / 分頻器 / (包絡值 + 1)
+    uint16_t div = 125000000 / PWM_FREQ / 10000; // 計算分頻器值
+    pwm_config_set_clkdiv(&config, div); // 設置 PWM 分頻器
+    // 設置包絡值,也就是計數器的最大值
+    pwm_config_set_wrap(&config, 9999); // 設置 PWM 計數器的最大值為 9999
+    // 使配置生效
+    pwm_init(slice_num, &config, true); // 初始化 PWM 並使配置生效
+
+    // 設置PWM占空比
+    uint16_t level_a = 9999 * 35 / 100; // 設置 GPIO0 的占空比為 35%
+    uint16_t level_b = 9999 * 75 / 100; // 設置 GPIO1 的占空比為 75%
+    pwm_set_chan_level(slice_num, PWM_CHAN_A, level_a); // 設置通道A (GPIO0) 的占空比
+    pwm_set_chan_level(slice_num, PWM_CHAN_B, level_b); // 設置通道B (GPIO1) 的占空比
+
+    // 讓主循環空轉,維持PWM輸出
+    while (1) {
+        tight_loop_contents(); // 主循環空轉，保持 PWM 輸出
+    }
+}
+
+// 互補輸出
+#include "pico/stdlib.h"
+#include "hardware/pwm.h"
+
+// PWM 參數
+#define PWM_FREQ 1000 // PWM 頻率為 1kHz
+#define PWM_DUTY_CYCLE 30 // PWM 占空比為 30%
+
+int main() {
+    // 選擇要使用的GPIO
+    const uint GPIO0 = 0;
+    const uint GPIO1 = 1;
+
+    // 將GPIO設置為PWM功能
+    gpio_set_function(GPIO0, GPIO_FUNC_PWM);
+    gpio_set_function(GPIO1, GPIO_FUNC_PWM);
+
+    // 找到PWM切片
+    uint slice_num = pwm_gpio_to_slice_num(GPIO0);
+
+    // 配置PWM
     pwm_config config = pwm_get_default_config();
-
-    // 設置分頻器,將計數器時鐘減少到 sysclock/4
-    pwm_config_set_clkdiv(&config, 4.f);
-
-    // 將配置載入到我們的 PWM 切片中,並設置為運行狀態
+    // 啟用相位校正模式
+    pwm_config_set_phase_correct(&config, true);
+    // 設置分頻器,以確定頻率
+    // 系統時鐘頻率為125MHz,頻率 = 125MHz / 分頻器 / (包絡值 + 1) / 2
+    // 注意在相位校正模式下,頻率會減半
+    uint16_t div = 125000000 / PWM_FREQ / 10000 / 2;
+    pwm_config_set_clkdiv(&config, div);
+    // 設置包絡值,也就是計數器的最大值
+    pwm_config_set_wrap(&config, 9999);
+    // 設置輸出極性
+    pwm_config_set_output_polarity(&config, false, true); // 通道B反相
+    // 使配置生效
     pwm_init(slice_num, &config, true);
 
-    // 在這一點之後的所有操作都在 PWM 中斷處理程序中進行,
-    // 所以我們可以在主迴圈中什麼也不做
-    while (1)
+    // 設置PWM占空比
+    uint16_t level = 9999 * PWM_DUTY_CYCLE / 100;
+    pwm_set_both_levels(slice_num, level, level); // 兩個通道使用相同的占空比
+
+    // 讓主循環空轉,維持PWM輸出
+    while (1) {
         tight_loop_contents();
-#endif
+    }
 }
+
 ```
-
-在這個示例中,我們使用 PWM 控制 LED 的亮度,實現漸變效果。程序的主要步驟如下:
-
-1. 將 LED 引腳設置為 PWM 功能。
-2. 找到連接到 LED 引腳的 PWM 切片編號。
-3. 設置 PWM 中斷,註冊中斷處理程序 `on_pwm_wrap()`。
-4. 配置 PWM 切片,設置分頻器和計數器範圍。
-5. 啟動 PWM,並在主迴圈中等待中斷觸發。
-
-在 `on_pwm_wrap()` 中斷處理程序中,我們通過改變 `fade` 值來控制 LED 的亮度。每次中斷觸發時,我們根據 `fade` 值的變化方向（增加或減少）來更新 LED 的亮度。為了使亮度變化看起來更加線性,我們將 `fade` 值平方後再設置給 PWM 輸出。
-
-:::tip
-使用中斷處理程序可以在不影響主程序執行的情況下實現 LED 亮度的平滑變化。這種方式非常適合需要持續更新輸出的場景。
+:::tips
+1個切片 兩個通道  相鄰 GPIO 是一個切片 如 GPIO0&GPIO1  GPIO2&GPIO3
 :::
 
 ## 程序示例 3: 測量 PWM 信號的佔空比
@@ -362,55 +372,109 @@ int main() {
 步進電機是一種常用的精密定位設備,可以通過控制脈衝信號來實現精確的角度控制。使用 PWM,我們可以生成控制步進電機所需的脈衝信號。以下是一個使用 PWM 控制步進電機的示例:
 
 ```c
+#include <stdio.h>
 #include "pico/stdlib.h"
 #include "hardware/pwm.h"
+#include "hardware/irq.h"
 
-const uint STEP_PIN = 2;
-const uint DIR_PIN = 3;
+#include "stdlib.h"
 
-int main() {
-    // 將步進引腳和方向引腳設置為 PWM 功能
-    gpio_set_function(STEP_PIN, GPIO_FUNC_PWM);
-    gpio_set_function(DIR_PIN, GPIO_FUNC_PWM);
+#define STEP_PIN 0
+#define DIR_PIN 1
+#define PWM_SLICE_NUM 0
+#define PULSES_PER_REV 1600  // 每圈脈衝數
+#define PWM_FREQ (10000)      // PWM 頻率 (Hz) 
 
-    // 獲取 PWM 切片編號和通道
-    uint slice_num_step = pwm_gpio_to_slice_num(STEP_PIN);
-    uint channel_step = pwm_gpio_to_channel(STEP_PIN);
-    uint slice_num_dir = pwm_gpio_to_slice_num(DIR_PIN);
-    uint channel_dir = pwm_gpio_to_channel(DIR_PIN);
+volatile int32_t pulse_count = 0;
+volatile int32_t target_pulses = 0;
+volatile bool motor_running = false;
+volatile float current_angle = 0.0f;
 
-    // 配置 PWM 切片
-    pwm_config config = pwm_get_default_config();
-    pwm_config_set_wrap(&config, 65535);
-    pwm_init(slice_num_step, &config, true);
-    pwm_init(slice_num_dir, &config, true);
-
-    // 設置方向為正向
-    pwm_set_chan_level(slice_num_dir, channel_dir, 0);
-
-    while (1) {
-        // 生成步進脈衝
-        for (int i = 0; i < 200; i++) {
-            pwm_set_chan_level(slice_num_step, channel_step, 32768);
-            sleep_us(500);
-            pwm_set_chan_level(slice_num_step, channel_step, 0);
-            sleep_us(500);
+void pwm_irq_handler() {
+    pwm_clear_irq(PWM_SLICE_NUM);
+    if (motor_running) {
+        pulse_count++;
+        if (pulse_count >= target_pulses) {
+            pwm_set_enabled(PWM_SLICE_NUM, false);
+            gpio_set_function(STEP_PIN, GPIO_FUNC_SIO);
+            gpio_set_dir(STEP_PIN, GPIO_OUT);
+            gpio_put(STEP_PIN, 0);  // 確保引腳為低電平
+            motor_running = false;
         }
-        sleep_ms(1000);
-
-        // 改變方向為反向
-        pwm_set_chan_level(slice_num_dir, channel_dir, 65535);
-
-        // 生成步進脈衝
-        for (int i = 0; i < 200; i++) {
-            pwm_set_chan_level(slice_num_step, channel_step, 32768);
-            sleep_us(500);
-            pwm_set_chan_level(slice_num_step, channel_step, 0);
-            sleep_us(500);
-        }
-        sleep_ms(1000);
     }
 }
+
+void configure_pwm() {
+    gpio_set_function(STEP_PIN, GPIO_FUNC_PWM);
+    
+    pwm_config config = pwm_get_default_config();
+    
+    // 計算分頻器值和包絡值
+    uint32_t clock_freq = clock_get_hz(clk_sys);  // 獲取系統時鐘頻率
+    uint32_t desired_freq = 1000;  // 目標頻率 1kHz
+    uint32_t divider = 1;
+    uint32_t wrap = clock_freq / (desired_freq * divider) - 1;
+
+    // 調整分頻器和包絡值，以獲得最接近目標頻率的設置
+    while (wrap > 65535 && divider < 256) {
+        divider++;
+        wrap = clock_freq / (desired_freq * divider) - 1;
+    }
+
+    pwm_config_set_clkdiv_int(&config, divider);
+    pwm_config_set_wrap(&config, wrap);
+
+    // 設置 50% 占空比
+    uint16_t level = (wrap + 1) / 2;
+    
+    pwm_init(PWM_SLICE_NUM, &config, false);
+    pwm_set_chan_level(PWM_SLICE_NUM, PWM_CHAN_A, level);
+    
+    pwm_clear_irq(PWM_SLICE_NUM);
+    pwm_set_irq_enabled(PWM_SLICE_NUM, true);
+    irq_set_exclusive_handler(PWM_IRQ_WRAP, pwm_irq_handler);
+    irq_set_enabled(PWM_IRQ_WRAP, true);
+}
+
+
+void rotate_motor(float angle) {
+    if (motor_running) return;  // 如果電機正在運轉，忽略新的命令
+
+    bool direction = angle >= 0;
+    target_pulses = abs((int)(angle / 360.0f * PULSES_PER_REV));
+    pulse_count = 0;
+    motor_running = true;
+
+    gpio_put(DIR_PIN, direction);
+    gpio_set_function(STEP_PIN, GPIO_FUNC_PWM);
+    pwm_set_enabled(PWM_SLICE_NUM, true);
+
+    current_angle += angle;
+    while (current_angle >= 360.0f) current_angle -= 360.0f;
+    while (current_angle < 0.0f) current_angle += 360.0f;
+}
+
+int main() {
+    stdio_init_all();
+
+    gpio_init(DIR_PIN);
+    gpio_set_dir(DIR_PIN, GPIO_OUT);
+    configure_pwm();
+
+    // printf("Stepper Motor Control\n");
+    // printf("Step Angle: 1.8 degrees, Microstepping: 8, Pulses per Revolution: 1600\n");
+
+    while (true) {
+
+        rotate_motor(80);
+        sleep_ms(1000);
+        rotate_motor(-80);
+        sleep_ms(1000);
+    }
+
+    return 0;
+}
+
 ```
 
 在這個示例中,我們使用兩個 PWM 通道來控制步進電機。一個通道用於生成步進脈衝,另一個通道用於控制步進電機的方向。我們通過設置脈衝的佔空比和頻率來生成所需的步進脈衝,並通過改變方向通道的電平來控制步進電機的旋轉方向。
@@ -418,75 +482,6 @@ int main() {
 :::note
 步進電機通常需要較高的電流驅動,因此建議使用專用的步進電機驅動器來控制步進電機。PWM 信號可以作為步進電機驅動器的輸入,用於控制步進脈衝和方向。
 :::
-
-好的,我會根據您的要求,進一步優化這部分內容,並善用 Markdown 和 Docusaurus 的特性,使目錄更加清晰。以下是優化後的內容:
-
-#### 詳解步進電機控制程式碼
-
-讓我們來詳細講解上述控制步進電機的程式碼,並解釋其中涉及的參數和設置。
-
-##### 定義步進引腳和方向引腳
-
-```c
-const uint STEP_PIN = 2;
-const uint DIR_PIN = 3;
-```
-
-首先,我們定義了兩個常量 `STEP_PIN` 和 `DIR_PIN`,分別表示連接步進電機的步進引腳和方向引腳。這裡我們將它們設置為 GPIO2 和 GPIO3。
-
-##### 設置引腳功能為 PWM
-
-```c
-gpio_set_function(STEP_PIN, GPIO_FUNC_PWM);
-gpio_set_function(DIR_PIN, GPIO_FUNC_PWM);
-```
-
-在 `main` 函數中,我們首先使用 `gpio_set_function` 函數將步進引腳和方向引腳設置為 PWM 功能。這樣我們就可以通過 PWM 來控制這兩個引腳的輸出。
-
-##### 獲取 PWM 切片編號和通道
-
-```c
-uint slice_num_step = pwm_gpio_to_slice_num(STEP_PIN);
-uint channel_step = pwm_gpio_to_channel(STEP_PIN);
-uint slice_num_dir = pwm_gpio_to_slice_num(DIR_PIN);
-uint channel_dir = pwm_gpio_to_channel(DIR_PIN);
-```
-
-接下來,我們使用 `pwm_gpio_to_slice_num` 和 `pwm_gpio_to_channel` 函數獲取步進引腳和方向引腳所對應的 PWM 切片編號和通道。每個 PWM 切片可以控制兩個通道,通常標記為 A 和 B。
-
-##### 配置 PWM 切片
-
-```c
-pwm_config config = pwm_get_default_config();
-pwm_config_set_wrap(&config, 65535);
-pwm_init(slice_num_step, &config, true);
-pwm_init(slice_num_dir, &config, true);
-```
-
-然後,我們使用 `pwm_get_default_config` 函數獲取 PWM 的默認配置,並使用 `pwm_config_set_wrap` 函數設置 PWM 計數器的最大值為 65535。這個值決定了 PWM 的解析度,設置為 65535 可以提供較高的解析度。
-
-接著,我們使用 `pwm_init` 函數初始化步進引腳和方向引腳所在的 PWM 切片,並將 `config` 應用到這些切片上。最後一個參數設置為 `true`,表示立即啟用 PWM 輸出。
-
-##### 設置步進電機旋轉方向
-
-```c
-pwm_set_chan_level(slice_num_dir, channel_dir, 0);
-```
-
-在設置方向為正向時,我們使用 `pwm_set_chan_level` 函數將方向引腳的 PWM 輸出電平設置為 0。這通常表示步進電機的正向旋轉。
-
-##### 生成步進脈衝
-
-```c
-for (int i = 0; i < 200; i++) {
-    pwm_set_chan_level(slice_num_step, channel_step, 32768);
-    sleep_us(500);
-    pwm_set_chan_level(slice_num_step, channel_step, 0);
-    sleep_us(500);
-}
-```
-
-在主循環中,我們首先生成 200 個步進脈衝。每個脈衝由一個高電平和一個低電平組成,高電平持續 500 微秒,低電平持續 500 微秒。我們使用 `pwm_set_chan_level` 函數設置步進引腳的 PWM 輸出電平為 32768（50% 佔空比）來生成高電平,然後延遲 500 微秒。接著,我們將步進引腳的 PWM 輸出電平設置為 0 來生成低電平,再延遲 500 微秒。這樣就生成了一個完整的步進脈衝。
 
 :::note
 生成步進脈衝的過程可以分為以下幾個步驟:
