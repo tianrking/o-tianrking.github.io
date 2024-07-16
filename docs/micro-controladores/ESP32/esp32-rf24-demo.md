@@ -8,7 +8,7 @@ authors:
    url: https://github.com/tianrking
    image_url: https://github.com/tianrking.png
 
-tags: [RP2040, PIO, LED Control, Resource Management, Raspberry Pi Pico, embedded systems, state machine optimization]
+tags: [ESP32, Resource Management,  embedded systems]
 ---
 
 ### RP2040 和 NRF24L01 引腳對應關係及 RF 參數設置

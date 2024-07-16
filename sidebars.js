@@ -47,6 +47,7 @@ const sidebars = {
                 label: ' ',
                 href: '#'
               },
+              'micro-controladores/ESP32/esp32-mcpwm-usage-and-examples',
               'micro-controladores/ESP32/esp32-rf24-demo'
             ]
         },
