@@ -8,7 +8,7 @@
 #include "driver/pulse_cnt.h"
 #include "driver/gptimer.h"
 #include "esp_log.h"
-#include "esp_timer.h"
+// #include "esp_timer.h"
 
 #define PCNT_HIGH_LIMIT 1000
 #define PCNT_LOW_LIMIT  -1000
