@@ -47,6 +47,8 @@ const sidebars = {
                 label: ' ',
                 href: '#'
               },
+              'micro-controladores/ESP32/esp32_all_need_know_zh_hk',
+              'micro-controladores/ESP32/esp32_all_need_know',
               'micro-controladores/ESP32/esp32-mcpwm-usage-and-examples',
               'micro-controladores/ESP32/esp32-rf24-demo'
             ]
