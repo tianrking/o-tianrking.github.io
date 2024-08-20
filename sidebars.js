@@ -31,6 +31,23 @@ const sidebars = {
       items: [
         {
           type: 'category',
+          label: 'CN',
+          collapsed: false,
+          items: [
+            {
+              type: 'link',
+              label: ' ',
+              href: '#'
+            },
+            'micro-controladores/CN/warning_uart_rts',
+            'micro-controladores/CN/bouffalo-BL602-AI-WB2-32s',
+            'micro-controladores/CN/bouffalo-BL616-AI-M62-32s',
+            'micro-controladores/CN/bouffalo-BL618-Sipeed-M0P-Dock',
+            'micro-controladores/CN/winnermicro-XT-E804-HLK-W801-Kit'
+          ]
+        },
+        {
+          type: 'category',
           label: 'STM32',
           collapsed: false,
           items: [
