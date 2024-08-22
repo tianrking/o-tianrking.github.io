@@ -39,6 +39,7 @@ const sidebars = {
               label: ' ',
               href: '#'
             },
+            'micro-controladores/CN/bouffalo_sdk',
             'micro-controladores/CN/warning_uart_rts',
             'micro-controladores/CN/bouffalo-BL602-AI-WB2-32s',
             'micro-controladores/CN/bouffalo-BL616-AI-M62-32s',
@@ -64,6 +65,7 @@ const sidebars = {
                 label: ' ',
                 href: '#'
               },
+              'micro-controladores/ESP32/esp-idf5.3_sdk',
               'micro-controladores/ESP32/esp32_all_need_know_zh_hk',
               'micro-controladores/ESP32/esp32_all_need_know',
               'micro-controladores/ESP32/esp32-mcpwm-usage-and-examples',
