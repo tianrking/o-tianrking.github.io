@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkEl_Jardin_Secreto_de_w0x7ce=self.webpackChunkEl_Jardin_Secreto_de_w0x7ce||[]).push([[9647],{7121:(e,r,c)=>{c.r(r),c.d(r,{default:()=>l});c(6540);var s=c(4164),a=c(9723),d=c(6578),n=c(2831),t=c(703),u=c(4848);function l(e){return(0,u.jsx)(a.e3,{className:(0,s.A)(d.G.wrapper.docsPages),children:(0,u.jsx)(t.A,{children:(0,n.v)(e.route.routes)})})}}}]);

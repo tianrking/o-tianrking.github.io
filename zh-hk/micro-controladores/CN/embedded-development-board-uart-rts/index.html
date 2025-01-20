@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="zh-HK" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-micro-controladores/CN/warning_uart_rts" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.4.0">
+<title data-rh="true">UART RTS Troubleshooting Guide for Embedded Development Boards | 🌵 El Jardín Secreto 🌵 </title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://me.w0x7ce.eu/zh-hk/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://me.w0x7ce.eu/zh-hk/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://me.w0x7ce.eu/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts"><meta data-rh="true" property="og:locale" content="zh_HK"><meta data-rh="true" property="og:locale:alternate" content="es_ES"><meta data-rh="true" property="og:locale:alternate" content="en_US"><meta data-rh="true" name="docusaurus_locale" content="zh-hk"><meta data-rh="true" name="docsearch:language" content="zh-hk"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="UART RTS Troubleshooting Guide for Embedded Development Boards | 🌵 El Jardín Secreto 🌵 "><meta data-rh="true" name="description" content="問題描述"><meta data-rh="true" property="og:description" content="問題描述"><link data-rh="true" rel="icon" href="/zh-hk/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://me.w0x7ce.eu/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts"><link data-rh="true" rel="alternate" href="https://me.w0x7ce.eu/micro-controladores/CN/embedded-development-board-uart-rts" hreflang="es-ES"><link data-rh="true" rel="alternate" href="https://me.w0x7ce.eu/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts" hreflang="zh-HK"><link data-rh="true" rel="alternate" href="https://me.w0x7ce.eu/en/micro-controladores/CN/embedded-development-board-uart-rts" hreflang="en-US"><link data-rh="true" rel="alternate" href="https://me.w0x7ce.eu/micro-controladores/CN/embedded-development-board-uart-rts" hreflang="x-default"><link rel="alternate" type="application/rss+xml" href="/zh-hk/blog/rss.xml" title="🌵 El Jardín Secreto 🌵  RSS Feed">
+<link rel="alternate" type="application/atom+xml" href="/zh-hk/blog/atom.xml" title="🌵 El Jardín Secreto 🌵  Atom Feed"><link rel="stylesheet" href="/zh-hk/assets/css/styles.742bc33a.css">
+<script src="/zh-hk/assets/js/runtime~main.cf8501f1.js" defer="defer"></script>
+<script src="/zh-hk/assets/js/main.debc9812.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<script>!function(){function t(t){document.documentElement.setAttribute("data-theme",t)}var e=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();t(null!==e?e:"light")}(),function(){try{const n=new URLSearchParams(window.location.search).entries();for(var[t,e]of n)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="跳至主要内容"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">跳至主要内容</a></div><nav aria-label="主導航" class="navbar navbar--fixed-top navbarHideable_m1mJ navbar--dark"><div class="navbar__inner"><div class="navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/zh-hk/"><div class="navbar__logo"><img src="https://github.com/tianrking.png" alt="Logo de El Jardín Secreto" class="themedComponent__dKv themedComponent--light_rzkv"><img src="https://github.com/tianrking.png" alt="Logo de El Jardín Secreto" class="themedComponent__dKv themedComponent--dark_mMAk"></div><b class="navbar__title text--truncate">🌵 秘密花園 🌵</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/zh-hk/tutorial">Tutorial</a><a class="navbar__item navbar__link" href="/zh-hk/blog">Blog</a></div><div class="navbar__items navbar__items--right"><a href="https://github.com/tianrking" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a><div class="navbar__item dropdown dropdown--hoverable dropdown--right"><a aria-haspopup="true" aria-expanded="false" role="button" class="navbar__link" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" class="iconLanguage_nlXk"><path fill="currentColor" d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"></path></svg>繁體中文</a><ul class="dropdown__menu"><li><a href="/micro-controladores/CN/embedded-development-board-uart-rts" target="_self" rel="noopener noreferrer" class="dropdown__link" lang="es-ES">Español</a></li><li><a href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts" target="_self" rel="noopener noreferrer" class="dropdown__link dropdown__link--active" lang="zh-HK">繁體中文</a></li><li><a href="/en/micro-controladores/CN/embedded-development-board-uart-rts" target="_self" rel="noopener noreferrer" class="dropdown__link" lang="en-US">English</a></li></ul></div><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS darkNavbarColorModeToggle_X3D1" type="button" disabled="" title="切換淺色/暗黑模式（當前為淺色模式）" aria-label="切換淺色/暗黑模式（當前為淺色模式）" aria-live="polite"><svg viewBox="0 0 24 24" width="24" height="24" class="lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" class="darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="回到頂部" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd sidebarWithHideableNavbar_wUlq"><a tabindex="-1" class="sidebarLogo_isFc" href="/zh-hk/"><img src="https://github.com/tianrking.png" alt="Logo de El Jardín Secreto" class="themedComponent__dKv themedComponent--light_rzkv"><img src="https://github.com/tianrking.png" alt="Logo de El Jardín Secreto" class="themedComponent__dKv themedComponent--dark_mMAk"><b>🌵 秘密花園 🌵</b></a><nav aria-label="文件側邊欄" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/zh-hk/tutorial">Tutorial</a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts">Micro-Controladores</a></div><ul style="display:block;overflow:visible;height:auto" class="menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" tabindex="0" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts">CN</a></div><ul style="display:block;overflow:visible;height:auto" class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts"> </a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/zh-hk/micro-controladores/CN/bouffalo-network-interfaces">Exploring Network Interfaces on Bouffalo MCUs</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts">UART RTS Troubleshooting Guide for Embedded Development Boards</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/zh-hk/micro-controladores/CN/bouffalo-BL602-AI-WB2-32s">Bouffalo BL602 AI-WB2-32S 使用指南 | Bouffalo BL602 AI-WB2-32S User Guide</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/zh-hk/micro-controladores/CN/bouffalo-BL616-AI-M62-32s">Bouffalo BL616 AI-M62-32S 使用指南 | Bouffalo BL616 AI-M62-32S User Guide</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/zh-hk/micro-controladores/CN/bouffalo-BL618-Sipeed-M0P-Dock">Bouffalo BL618 Sipeed M0P Dock  使用指南 | Bouffalo BL618 Sipeed M0P Dock User Guide</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/zh-hk/micro-controladores/CN/winnermicro-XT-E804-HLK-W801-Kit">Winnermicro XT-E804 HLK-W801 Kit 使用指南 | Winnermicro XT-E804 HLK-W801 Kit User Guide</a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="true" tabindex="0" href="/zh-hk/micro-controladores/STM32/desarrollo-cdc-stm32cubemx">STM32</a></div><ul style="display:block;overflow:visible;height:auto" class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/zh-hk/micro-controladores/STM32/desarrollo-cdc-stm32cubemx">Desarrollo de comunicación CDC con STM32CubeMX</a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="true" tabindex="0" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts">ESP32</a></div><ul style="display:block;overflow:visible;height:auto" class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts"> </a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/zh-hk/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces">Exploring WiFi Interfaces in ESP-IDF 5.3</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/zh-hk/micro-controladores/ESP32/esp32-programming-examples-guide">ESP32 編程示例指南 | Guía de Ejemplos de Programación para ESP32</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/zh-hk/micro-controladores/ESP32/esp32-lista-de-ejemplos-de-programacion">Guía de Ejemplos de Programación para ESP32 | ESP32 编程示例指南</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/zh-hk/micro-controladores/ESP32/esp32-mcpwm-usage-and-examples">ESP32 MCPWM Usage Guide and Examples | ESP32 MCPWM 使用指南與範例</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/zh-hk/micro-controladores/ESP32/esp32-rp2040-nrf24l01-wireless-communication">ESP32 and RP2040 Wireless Communication with NRF24L01 | ESP32 與 RP2040 使用 NRF24L01 無線通信模組指南</a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="true" tabindex="0" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts">RP2040</a></div><ul style="display:block;overflow:visible;height:auto" class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts"> </a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/zh-hk/micro-controladores/RP2040/rp2040-uart-interrupt-handling-and-usage">UART Interrupt Handling and Data Transmission in RP2040</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/zh-hk/micro-controladores/RP2040/rp2040-pwm-usage-and-examples">Detailed Explanation of PWM Usage and Examples in RP2040</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/zh-hk/micro-controladores/RP2040/rp2040-timer-and-alarm-usage">Timer and Alarm Usage in RP2040</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/zh-hk/micro-controladores/RP2040/mastering-pio-programming-rp2040">Mastering PIO Programming on RP2040</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/zh-hk/micro-controladores/RP2040/pio-uart-implementation-rp2040">Implementing UART (TX )with PIO on RP2040</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/zh-hk/micro-controladores/RP2040/advanced-pio-led-control-resource-management-rp2040">Advanced PIO LED Control and Resource Management on RP2040</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/zh-hk/micro-controladores/RP2040/rp2040-rf24-demo">rp2040-rf24-demo</a></li></ul></li></ul></li></ul></nav><button type="button" title="收起側邊欄" aria-label="收起側邊欄" class="button button--secondary button--outline collapseSidebarButton_PEFL"><svg width="20" height="20" aria-hidden="true" class="collapseSidebarButtonIcon_kv0_"><g fill="#7a7a7a"><path d="M9.992 10.023c0 .2-.062.399-.172.547l-4.996 7.492a.982.982 0 01-.828.454H1c-.55 0-1-.453-1-1 0-.2.059-.403.168-.551l4.629-6.942L.168 3.078A.939.939 0 010 2.528c0-.548.45-.997 1-.997h2.996c.352 0 .649.18.828.45L9.82 9.472c.11.148.172.347.172.55zm0 0"></path><path d="M19.98 10.023c0 .2-.058.399-.168.547l-4.996 7.492a.987.987 0 01-.828.454h-3c-.547 0-.996-.453-.996-1 0-.2.059-.403.168-.551l4.625-6.942-4.625-6.945a.939.939 0 01-.168-.55 1 1 0 01.996-.997h3c.348 0 .649.18.828.45l4.996 7.492c.11.148.168.347.168.55zm0 0"></path></g></svg></button></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="頁面路徑"><ul class="breadcrumbs" itemscope="" itemtype="https://schema.org/BreadcrumbList"><li class="breadcrumbs__item"><a aria-label="主頁面" class="breadcrumbs__link" href="/zh-hk/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">Micro-Controladores</span><meta itemprop="position" content="1"></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">CN</span><meta itemprop="position" content="2"></li><li itemscope="" itemprop="itemListElement" itemtype="https://schema.org/ListItem" class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link" itemprop="name">UART RTS Troubleshooting Guide for Embedded Development Boards</span><meta itemprop="position" content="3"></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">本頁導覽</button></div><div class="theme-doc-markdown markdown"><h1>嵌入式開發板 UART RTS 問題解決指南</h1>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="問題描述">問題描述<a class="hash-link" aria-label="問題描述的直接連結" title="問題描述的直接連結" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#問題描述">​</a></h2>
+<p>在使用某些嵌入式開發板（如 Bouffalo 系列、Winnermicro 系列等）進行開發時，我們可能會遇到與 UART 的 RTS（Ready to Send）信號相關的問題。這個問題可能會影響開發過程，尤其是在使用某些常見的串口調試工具時。 (winnermicro w801 ;bouffalo bl602,bl616;etc..)</p>
+<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="觀察到的現象">觀察到的現象<a class="hash-link" aria-label="觀察到的現象的直接連結" title="觀察到的現象的直接連結" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#觀察到的現象">​</a></h3>
+<ol>
+<li>
+<p><strong>正常啟動</strong>：開發板連接 USB 後，能正常運行片內燒錄的程序。</p>
+</li>
+<li>
+<p><strong>串口工具影響</strong>：</p>
+<ul>
+<li>使用某些串口程序（如 Putty、XShell、Cutecom、Minicom）連接時，開發板可能會立即暫停運行。</li>
+<li>而使用其他軟件（如專用的升級工具或某些特定的串口工具）則不會出現這種情況。</li>
+</ul>
+</li>
+<li>
+<p><strong>RTS 信號影響</strong>：</p>
+<ul>
+<li>關鍵區別在於 RTS 信號的電平狀態。</li>
+<li>正常運行時，RTS 通常需要保持高電平。</li>
+</ul>
+</li>
+<li>
+<p><strong>復位行為</strong>：</p>
+<ul>
+<li>串口拉低 RTS 時，某些開發板可能會被重置。</li>
+<li>如果 RTS 持續低電平，開發板可能保持停止狀態。</li>
+<li>將 RTS 拉回高電平，開發板可能會復位並重新啟動。</li>
+</ul>
+</li>
+</ol>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="原因分析">原因分析<a class="hash-link" aria-label="原因分析的直接連結" title="原因分析的直接連結" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#原因分析">​</a></h2>
+<p>這個現象的根本原因可能在於開發板對 UART 的 RTS 信號的特殊處理：</p>
+<ol>
+<li><strong>硬件設計</strong>：開發板的復位電路可能與 RTS 信號相連。</li>
+<li><strong>固件配置</strong>：固件可能被設置為響應 RTS 信號的變化。</li>
+<li><strong>調試設計</strong>：這可能是為了方便調試和編程而設計的功能。</li>
+</ol>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="解決方案">解決方案<a class="hash-link" aria-label="解決方案的直接連結" title="解決方案的直接連結" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#解決方案">​</a></h2>
+<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="軟件方法">軟件方法<a class="hash-link" aria-label="軟件方法的直接連結" title="軟件方法的直接連結" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#軟件方法">​</a></h3>
+<ol>
+<li>
+<p><strong>選擇合適的串口工具</strong>：</p>
+<ul>
+<li>Windows：推薦使用不會自動控制 RTS 的工具，如 XCOM 或 VOFA+</li>
+<li>Linux：推薦使用 Cutecom，可通過以下命令安裝：<!-- -->
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">sudo apt install cutecom</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="複製代碼至剪貼簿" title="複製" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+</li>
+<li>也可以考慮使用跨平台的串口工具，如 PuTTY 或 TeraTerm，但需要在設置中禁用 RTS/CTS 流控制</li>
+</ul>
+</li>
+<li>
+<p><strong>配置串口工具</strong>：
+在使用任何串口工具時，確保在設置中禁用硬件流控制。</p>
+</li>
+<li>
+<p><strong>編程方式</strong>：
+使用編程語言（如 Python 和 pyserial 庫）直接控制串口通信，可以更精確地控制 RTS 信號：</p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">import</span><span class="token plain"> serial</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">ser </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> serial</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">Serial</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&#x27;/dev/ttyUSB0&#x27;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">115200</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> rtscts</span><span class="token operator" style="color:#393A34">=</span><span class="token boolean" style="color:#36acaa">False</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">ser</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">setRTS</span><span class="token punctuation" style="color:#393A34">(</span><span class="token boolean" style="color:#36acaa">False</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain">  </span><span class="token comment" style="color:#999988;font-style:italic"># 確保 RTS 保持高電平</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="複製代碼至剪貼簿" title="複製" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+</li>
+</ol>
+<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="硬件方法">硬件方法<a class="hash-link" aria-label="硬件方法的直接連結" title="硬件方法的直接連結" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#硬件方法">​</a></h3>
+<ol>
+<li>
+<p><strong>RTS 信號上拉</strong>：
+在 RTS 線和 VCC（通常是 3.3V）之間添加一個 10kΩ 電阻，確保 RTS 始終保持高電平。</p>
+</li>
+<li>
+<p><strong>信號隔離</strong>：
+使用三極管或 MOSFET 電路隔離 RTS 信號。</p>
+</li>
+</ol>
+<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="開發技巧">開發技巧<a class="hash-link" aria-label="開發技巧的直接連結" title="開發技巧的直接連結" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#開發技巧">​</a></h3>
+<ol>
+<li>
+<p><strong>連接順序</strong>：先給開發板上電，待其啟動後再連接串口工具。</p>
+</li>
+<li>
+<p><strong>替代調試方法</strong>：</p>
+<ul>
+<li>使用專用的 UART 轉 USB 芯片（如 CP2102、CH340 等）</li>
+<li>利用邏輯分析儀或示波器  監控 RTS 信號</li>
+</ul>
+</li>
+<li>
+<p><strong>固件修改</strong>：
+如果可能，考慮修改開發板固件，使其不依賴 RTS 進行復位。</p>
+</li>
+</ol>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="注意事項">注意事項<a class="hash-link" aria-label="注意事項的直接連結" title="注意事項的直接連結" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#注意事項">​</a></h2>
+<ul>
+<li>不同開發板可能對 RTS 信號有不同的處理方式，請參考具體開發板的文檔。</li>
+<li>進行任何硬件修改時，請小心操作，避免損壞開發板。</li>
+<li>如果您不確定如何處理，請聯繫開發板製造商尋求技術支持。</li>
+</ul>
+<h1>Guía de Solución de Problemas UART RTS en Placas de Desarrollo Embebido</h1>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="descripción-del-problema">Descripción del Problema<a class="hash-link" aria-label="Descripción del Problema的直接連結" title="Descripción del Problema的直接連結" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#descripción-del-problema">​</a></h2>
+<p>Al trabajar con ciertas placas de desarrollo embebido (como las series Bouffalo, Winnermicro, entre otras), podemos encontrar problemas relacionados con la señal RTS (Ready to Send) de UART. Este problema puede afectar el proceso de desarrollo, especialmente cuando se utilizan herramientas comunes de depuración serial.</p>
+<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="fenómenos-observados">Fenómenos Observados<a class="hash-link" aria-label="Fenómenos Observados的直接連結" title="Fenómenos Observados的直接連結" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#fenómenos-observados">​</a></h3>
+<ol>
+<li>
+<p><strong>Inicio Normal</strong>: La placa de desarrollo funciona normalmente con el programa grabado después de conectarse por USB.</p>
+</li>
+<li>
+<p><strong>Influencia de Herramientas Seriales</strong>:</p>
+<ul>
+<li>Al conectar con programas como Putty, XShell, Cutecom o Minicom, la placa puede dejar de funcionar inmediatamente.</li>
+<li>Sin embargo, esto no ocurre con herramientas específicas de actualización o ciertos programas seriales.</li>
+</ul>
+</li>
+<li>
+<p><strong>Influencia de la Señal RTS</strong>:</p>
+<ul>
+<li>La diferencia clave está en el estado del nivel de la señal RTS.</li>
+<li>Para un funcionamiento normal, RTS generalmente debe mantenerse en nivel alto.</li>
+</ul>
+</li>
+<li>
+<p><strong>Comportamiento de Reinicio</strong>:</p>
+<ul>
+<li>Cuando el puerto serial baja RTS, algunas placas pueden reiniciarse.</li>
+<li>Si RTS se mantiene en nivel bajo, la placa puede permanecer en estado de parada.</li>
+<li>Al volver RTS a nivel alto, la placa puede reiniciarse y volver a funcionar.</li>
+</ul>
+</li>
+</ol>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="análisis-de-causas">Análisis de Causas<a class="hash-link" aria-label="Análisis de Causas的直接連結" title="Análisis de Causas的直接連結" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#análisis-de-causas">​</a></h2>
+<p>La causa fundamental de este fenómeno puede estar en el manejo especial de la señal RTS UART por parte de la placa de desarrollo:</p>
+<ol>
+<li><strong>Diseño de Hardware</strong>: El circuito de reinicio de la placa puede estar conectado a la señal RTS.</li>
+<li><strong>Configuración de Firmware</strong>: El firmware puede estar configurado para responder a cambios en la señal RTS.</li>
+<li><strong>Diseño para Depuración</strong>: Puede ser una función diseñada para facilitar la depuración y programación.</li>
+</ol>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="soluciones">Soluciones<a class="hash-link" aria-label="Soluciones的直接連結" title="Soluciones的直接連結" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#soluciones">​</a></h2>
+<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="métodos-de-software">Métodos de Software<a class="hash-link" aria-label="Métodos de Software的直接連結" title="Métodos de Software的直接連結" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#métodos-de-software">​</a></h3>
+<ol>
+<li>
+<p><strong>Elegir Herramientas Seriales Adecuadas</strong>:</p>
+<ul>
+<li>Windows: Se recomienda usar herramientas que no controlen automáticamente RTS, como XCOM o VOFA+</li>
+<li>Linux: Se recomienda Cutecom, que se puede instalar con:<!-- -->
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">sudo apt install cutecom</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="複製代碼至剪貼簿" title="複製" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+</li>
+<li>También se pueden considerar herramientas multiplataforma como PuTTY o TeraTerm, asegurándose de desactivar el control de flujo RTS/CTS en la configuración</li>
+</ul>
+</li>
+<li>
+<p><strong>Configurar Herramientas Seriales</strong>:
+Asegúrese de desactivar el control de flujo por hardware en la configuración de cualquier herramienta serial.</p>
+</li>
+<li>
+<p><strong>Método de Programación</strong>:
+Use lenguajes de programación como Python con la biblioteca pyserial para controlar directamente la comunicación serial:</p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">import</span><span class="token plain"> serial</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">ser </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> serial</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">Serial</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&#x27;/dev/ttyUSB0&#x27;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">115200</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> rtscts</span><span class="token operator" style="color:#393A34">=</span><span class="token boolean" style="color:#36acaa">False</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">ser</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">setRTS</span><span class="token punctuation" style="color:#393A34">(</span><span class="token boolean" style="color:#36acaa">False</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain">  </span><span class="token comment" style="color:#999988;font-style:italic"># Asegura que RTS se mantenga en nivel alto</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="複  製代碼至剪貼簿" title="複製" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+</li>
+</ol>
+<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="métodos-de-hardware">Métodos de Hardware<a class="hash-link" aria-label="Métodos de Hardware的直接連結" title="Métodos de Hardware的直接連結" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#métodos-de-hardware">​</a></h3>
+<ol>
+<li>
+<p><strong>Pull-up de la Señal RTS</strong>:
+Añada una resistencia de 10kΩ entre la línea RTS y VCC (generalmente 3.3V) para mantener RTS en nivel alto.</p>
+</li>
+<li>
+<p><strong>Aislamiento de Señal</strong>:
+Use un circuito con transistor o MOSFET para aislar la señal RTS.</p>
+</li>
+</ol>
+<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="técnicas-de-desarrollo">Técnicas de Desarrollo<a class="hash-link" aria-label="Técnicas de Desarrollo的直接連結" title="Técnicas de Desarrollo的直接連結" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#técnicas-de-desarrollo">​</a></h3>
+<ol>
+<li>
+<p><strong>Orden de Conexión</strong>: Encienda primero la placa de desarrollo y conéctela a la herramienta serial después de que haya iniciado.</p>
+</li>
+<li>
+<p><strong>Métodos Alternativos de Depuración</strong>:</p>
+<ul>
+<li>Use chips UART a USB dedicados (como CP2102, CH340, etc.)</li>
+<li>Utilice un analizador lógico u osciloscopio para monitorear la señal RTS</li>
+</ul>
+</li>
+<li>
+<p><strong>Modificación de Firmware</strong>:
+Si es posible, considere modificar el firmware de la placa para que no dependa de RTS para el reinicio.</p>
+</li>
+</ol>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="precauciones">Precauciones<a class="hash-link" aria-label="Precauciones的直接連結" title="Precauciones的直接連結" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#precauciones">​</a></h2>
+<ul>
+<li>Diferentes placas de desarrollo pueden manejar la señal RTS de manera distinta. Consulte la documentación específica de su placa.</li>
+<li>Tenga cuidado al realizar modificaciones de hardware para evitar dañar la placa.</li>
+<li>Si no está seguro de cómo proceder, contacte al fabricante de la placa para obtener soporte técnico.</li>
+</ul>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="conclusión">Conclusión<a class="hash-link" aria-label="Conclusión的直接連結" title="Conclusión的直接連結" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#conclusión">​</a></h2>
+<p>Entender y resolver este problema de UART RTS es crucial para un desarrollo estable y eficiente con varias placas de desarrollo embebido. Adoptando las medidas adecuadas de software y hardware, podemos asegurar un proceso de desarrollo fluido y aprovechar al máximo el potencial de estas potentes placas de desarrollo.</p>
+<h1>UART RTS Troubleshooting Guide for Embedded Development Boards</h1>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="problem-description">Problem Description<a class="hash-link" aria-label="Problem Description的直接連結" title="Problem Description的直接連結" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#problem-description">​</a></h2>
+<p>When working with certain embedded development boards (such as Bouffalo series, Winnermicro series, etc.), we may encounter issues related to the UART RTS (Ready to Send) signal. This problem can affect the development process, especially when using common serial debugging tools.</p>
+<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="observed-phenomena">Observed Phenomena<a class="hash-link" aria-label="Observed Phenomena的直接連結" title="Observed Phenomena的直接連結" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#observed-phenomena">​</a></h3>
+<ol>
+<li>
+<p><strong>Normal Startup</strong>: The development board operates normally with the programmed firmware after connecting via USB.</p>
+</li>
+<li>
+<p><strong>Influence of Serial Tools</strong>:</p>
+<ul>
+<li>When connecting with programs like Putty, XShell, Cutecom, or Minicom, the board may immediately stop working.</li>
+<li>However, this does not occur with specific upgrade tools or certain serial programs.</li>
+</ul>
+</li>
+<li>
+<p><strong>RTS Signal Influence</strong>:</p>
+<ul>
+<li>The key difference lies in the state of the RTS signal level.</li>
+<li>For normal operation, RTS usually needs to be maintained at a high level.</li>
+</ul>
+</li>
+<li>
+<p><strong>Reset Behavior</strong>:</p>
+<ul>
+<li>When the serial port pulls RTS low, some boards may reset.</li>
+<li>If RTS remains low, the board may stay in a stopped state.</li>
+<li>Pulling RTS back to high may cause the board to reset and restart.</li>
+</ul>
+</li>
+</ol>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="cause-analysis">Cause Analysis<a class="hash-link" aria-label="Cause Analysis的直接連結" title="Cause Analysis的直接連結" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#cause-analysis">​</a></h2>
+<p>The root cause of this phenomenon may lie in the special handling of the UART RTS signal by the development board:</p>
+<ol>
+<li><strong>Hardware Design</strong>: The board&#x27;s reset circuit may be connected to the RTS signal.</li>
+<li><strong>Firmware Configuration</strong>: The firmware may be set to respond to changes in the RTS signal.</li>
+<li><strong>Debugging Design</strong>: This may be a feature designed to facilitate debugging and programming.</li>
+</ol>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="solutions">Solutions<a class="hash-link" aria-label="Solutions的直接連結" title="Solutions的直接連結" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#solutions">​</a></h2>
+<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="software-methods">Software Methods<a class="hash-link" aria-label="Software Methods的直接連結" title="Software Methods的直接連結" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#software-methods">​</a></h3>
+<ol>
+<li>
+<p><strong>Choose Appropriate Serial Tools</strong>:</p>
+<ul>
+<li>Windows: It&#x27;s recommended to use tools that don&#x27;t automatically control RTS, such as XCOM or VOFA+</li>
+<li>Linux: Cutecom is recommended, which can be installed with:<!-- -->
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">sudo apt install cutecom</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="複製代碼至剪貼簿" title="複製" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+</li>
+<li>Cross-platform tools like PuTTY or TeraTerm can also be considered, but make sure to disable RTS/CTS flow control in the settings</li>
+</ul>
+</li>
+<li>
+<p><strong>Configure Serial Tools</strong>:
+Ensure that hardware flow control is disabled in the settings when using any serial tool.</p>
+</li>
+<li>
+<p><strong>Programming Method</strong>:
+Use programming languages (such as Python with the pyserial library) to directly control serial communication, allowing more precise control of the RTS signal:</p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">import</span><span class="token plain"> serial</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">ser </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> serial</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">Serial</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&#x27;/dev/ttyUSB0&#x27;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">115200</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> rtscts</span><span class="token operator" style="color:#393A34">=</span><span class="token boolean" style="color:#36acaa">False</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">ser</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">setRTS</span><span class="token punctuation" style="color:#393A34">(</span><span class="token boolean" style="color:#36acaa">False</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain">  </span><span class="token comment" style="color:#999988;font-style:italic"># Ensure RTS remains high</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="複製代碼至剪貼簿" title="複製" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+</li>
+</ol>
+<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="hardware-methods">Hardware Methods<a class="hash-link" aria-label="Hardware Methods的直接連結" title="Hardware Methods的直接連結" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#hardware-methods">​</a></h3>
+<ol>
+<li>
+<p><strong>RTS Signal Pull-up</strong>:
+Add a 10kΩ resistor between the RTS line and VCC (usually 3.3V) to ensure RTS always remains high.</p>
+</li>
+<li>
+<p><strong>Signal Isolation</strong>:
+Use a transistor or MOSFET circuit to isolate the RTS signal.</p>
+</li>
+</ol>
+<h3 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="development-techniques">Development Techniques<a class="hash-link" aria-label="Development Techniques的直接連結" title="Development Techniques的直接連結" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#development-techniques">​</a></h3>
+<ol>
+<li>
+<p><strong>Connection Order</strong>: Power on the development board first, then connect it to the serial tool after it has started.</p>
+</li>
+<li>
+<p><strong>Alternative Debugging Methods</strong>:</p>
+<ul>
+<li>Use dedicated UART to USB chips (such as CP2102, CH340, etc.)</li>
+<li>Use a logic analyzer or oscilloscope to monitor the RTS signal</li>
+</ul>
+</li>
+<li>
+<p><strong>Firmware Modification</strong>:
+If possible, consider modifying the board&#x27;s firmware so that it does not rely on RTS for reset.</p>
+</li>
+</ol>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="precautions">Precautions<a class="hash-link" aria-label="Precautions的直接連結" title="Precautions的直接連結" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#precautions">​</a></h2>
+<ul>
+<li>Different development boards may handle the RTS signal differently. Refer to the specific documentation for your board.</li>
+<li>Be careful when making any hardware modifications to avoid damaging the board.</li>
+<li>If you are unsure how to proceed, contact the board manufacturer for technical support.</li>
+</ul>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="conclusion">Conclusion<a class="hash-link" aria-label="Conclusion的直接連結" title="Conclusion的直接連結" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#conclusion">​</a></h2>
+<p>Understanding and resolving this UART RTS issue is crucial for stable and efficient development with various embedded development boards. By adopting appropriate software and hardware measures, we can ensure a smooth development process and fully leverage the potential of these powerful development boards.</p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-tags-row"><div class="col"><b>標籤：</b><ul class="tags_jXut padding--none margin-left--sm"><li class="tag_QGVx"><a class="tag_zVej tagRegular_sFm0" href="/zh-hk/tags/embedded-systems">embedded systems</a></li><li class="tag_QGVx"><a class="tag_zVej tagRegular_sFm0" href="/zh-hk/tags/uart">UART</a></li><li class="tag_QGVx"><a class="tag_zVej tagRegular_sFm0" href="/zh-hk/tags/rts">RTS</a></li><li class="tag_QGVx"><a class="tag_zVej tagRegular_sFm0" href="/zh-hk/tags/debugging-techniques">debugging techniques</a></li><li class="tag_QGVx"><a class="tag_zVej tagRegular_sFm0" href="/zh-hk/tags/io-t">IoT</a></li><li class="tag_QGVx"><a class="tag_zVej tagRegular_sFm0" href="/zh-hk/tags/w-801">w801</a></li><li class="tag_QGVx"><a class="tag_zVej tagRegular_sFm0" href="/zh-hk/tags/bl-616">bl616</a></li><li class="tag_QGVx"><a class="tag_zVej tagRegular_sFm0" href="/zh-hk/tags/bl-602">bl602</a></li><li class="tag_QGVx"><a class="tag_zVej tagRegular_sFm0" href="/zh-hk/tags/bouffalo">bouffalo</a></li><li class="tag_QGVx"><a class="tag_zVej tagRegular_sFm0" href="/zh-hk/tags/winnermicro">winnermicro</a></li></ul></div></div><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"><a href="https://github.com/tianrking/tianrking.github.io/tree/V3.4/docs/micro-controladores/CN/warning_uart_rts.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>編輯此頁</a></div><div class="col lastUpdated_JAkA"><span class="theme-last-updated">最後<!-- -->於 <b><time datetime="2024-08-20T06:45:33.000Z" itemprop="dateModified">2024年8月20日</time></b> <!-- -->更新</span></div></div></footer></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="文件選項卡"><a class="pagination-nav__link pagination-nav__link--prev" href="/zh-hk/micro-controladores/CN/bouffalo-network-interfaces"><div class="pagination-nav__sublabel">上一頁</div><div class="pagination-nav__label">Exploring Network Interfaces on Bouffalo MCUs</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/zh-hk/micro-controladores/CN/bouffalo-BL602-AI-WB2-32s"><div class="pagination-nav__sublabel">下一頁</div><div class="pagination-nav__label">Bouffalo BL602 AI-WB2-32S 使用指南 | Bouffalo BL602 AI-WB2-32S User Guide</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a class="table-of-contents__link toc-highlight" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#問題描述">問題描述</a><ul><li><a class="table-of-contents__link toc-highlight" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#觀察到的現象">觀察到的現象</a></li></ul></li><li><a class="table-of-contents__link toc-highlight" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#原因分析">原因分析</a></li><li><a class="table-of-contents__link toc-highlight" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#解決方案">解決方案</a><ul><li><a class="table-of-contents__link toc-highlight" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#軟件方法">軟件方法</a></li><li><a class="table-of-contents__link toc-highlight" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#硬件方法">硬件方法</a></li><li><a class="table-of-contents__link toc-highlight" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#開發技巧">開發技巧</a></li></ul></li><li><a class="table-of-contents__link toc-highlight" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#注意事項">注意事項</a></li><li><a class="table-of-contents__link toc-highlight" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#descripción-del-problema">Descripción del Problema</a><ul><li><a class="table-of-contents__link toc-highlight" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#fenómenos-observados">Fenómenos Observados</a></li></ul></li><li><a class="table-of-contents__link toc-highlight" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#análisis-de-causas">Análisis de Causas</a></li><li><a class="table-of-contents__link toc-highlight" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#soluciones">Soluciones</a><ul><li><a class="table-of-contents__link toc-highlight" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#métodos-de-software">Métodos de Software</a></li><li><a class="table-of-contents__link toc-highlight" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#métodos-de-hardware">Métodos de Hardware</a></li><li><a class="table-of-contents__link toc-highlight" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#técnicas-de-desarrollo">Técnicas de Desarrollo</a></li></ul></li><li><a class="table-of-contents__link toc-highlight" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#precauciones">Precauciones</a></li><li><a class="table-of-contents__link toc-highlight" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#conclusión">Conclusión</a></li><li><a class="table-of-contents__link toc-highlight" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#problem-description">Problem Description</a><ul><li><a class="table-of-contents__link toc-highlight" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#observed-phenomena">Observed Phenomena</a></li></ul></li><li><a class="table-of-contents__link toc-highlight" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#cause-analysis">Cause Analysis</a></li><li><a class="table-of-contents__link toc-highlight" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#solutions">Solutions</a><ul><li><a class="table-of-contents__link toc-highlight" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#software-methods">Software Methods</a></li><li><a class="table-of-contents__link toc-highlight" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#hardware-methods">Hardware Methods</a></li><li><a class="table-of-contents__link toc-highlight" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#development-techniques">Development Techniques</a></li></ul></li><li><a class="table-of-contents__link toc-highlight" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#precautions">Precautions</a></li><li><a class="table-of-contents__link toc-highlight" href="/zh-hk/micro-controladores/CN/embedded-development-board-uart-rts#conclusion">Conclusion</a></li></ul></div></div></div></div></main></div></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/zh-hk/docs/intro">Tutorial</a></li></ul></div><div class="col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://stackoverflow.com/questions/tagged/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item">Stack Overflow<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://discordapp.com/invite/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item">Discord<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://twitter.com/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item">Twitter<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div><div class="col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/zh-hk/blog">Blog</a></li><li class="footer__item"><a href="https://github.com/tianrking/tianrking.github.io" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2024 w0x7ce. Thanks @meta</div></div></div></footer></div>
+</body>
+</html>

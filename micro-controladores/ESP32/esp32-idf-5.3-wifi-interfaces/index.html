@@ -1,0 +1,747 @@
+<!doctype html>
+<html lang="es-ES" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-micro-controladores/ESP32/esp-idf5.3_sdk" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.4.0">
+<title data-rh="true">Exploring WiFi Interfaces in ESP-IDF 5.3 | 🌵 El Jardín Secreto 🌵 </title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://me.w0x7ce.eu/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://me.w0x7ce.eu/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://me.w0x7ce.eu/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces"><meta data-rh="true" property="og:locale" content="es_ES"><meta data-rh="true" property="og:locale:alternate" content="zh_HK"><meta data-rh="true" property="og:locale:alternate" content="en_US"><meta data-rh="true" name="docusaurus_locale" content="es"><meta data-rh="true" name="docsearch:language" content="es"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Exploring WiFi Interfaces in ESP-IDF 5.3 | 🌵 El Jardín Secreto 🌵 "><meta data-rh="true" name="description" content="https://github.com/espressif/esp-idf/tree/dbce23f8a449eb436b0b574726fe6ce9a6df67cc"><meta data-rh="true" property="og:description" content="https://github.com/espressif/esp-idf/tree/dbce23f8a449eb436b0b574726fe6ce9a6df67cc"><link data-rh="true" rel="icon" href="/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://me.w0x7ce.eu/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces"><link data-rh="true" rel="alternate" href="https://me.w0x7ce.eu/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces" hreflang="es-ES"><link data-rh="true" rel="alternate" href="https://me.w0x7ce.eu/zh-hk/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces" hreflang="zh-HK"><link data-rh="true" rel="alternate" href="https://me.w0x7ce.eu/en/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces" hreflang="en-US"><link data-rh="true" rel="alternate" href="https://me.w0x7ce.eu/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces" hreflang="x-default"><link rel="alternate" type="application/rss+xml" href="/blog/rss.xml" title="🌵 El Jardín Secreto 🌵  RSS Feed">
+<link rel="alternate" type="application/atom+xml" href="/blog/atom.xml" title="🌵 El Jardín Secreto 🌵  Atom Feed"><link rel="stylesheet" href="/assets/css/styles.742bc33a.css">
+<script src="/assets/js/runtime~main.c25e68a7.js" defer="defer"></script>
+<script src="/assets/js/main.24f5da89.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<script>!function(){function t(t){document.documentElement.setAttribute("data-theme",t)}var e=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();t(null!==e?e:"light")}(),function(){try{const n=new URLSearchParams(window.location.search).entries();for(var[t,e]of n)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Saltar al contenido principal"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Saltar al contenido principal</a></div><nav aria-label="Principal" class="navbar navbar--fixed-top navbarHideable_m1mJ navbar--dark"><div class="navbar__inner"><div class="navbar__items"><button aria-label="Alternar barra lateral" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/"><div class="navbar__logo"><img src="https://github.com/tianrking.png" alt="Logo de El Jardín Secreto" class="themedComponent__dKv themedComponent--light_rzkv"><img src="https://github.com/tianrking.png" alt="Logo de El Jardín Secreto" class="themedComponent__dKv themedComponent--dark_mMAk"></div><b class="navbar__title text--truncate">🌵 El Jardín Secreto 🌵</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/tutorial">Tutorial</a><a class="navbar__item navbar__link" href="/blog">Blog</a></div><div class="navbar__items navbar__items--right"><a href="https://github.com/tianrking" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a><div class="navbar__item dropdown dropdown--hoverable dropdown--right"><a aria-haspopup="true" aria-expanded="false" role="button" class="navbar__link" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" class="iconLanguage_nlXk"><path fill="currentColor" d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"></path></svg>Español</a><ul class="dropdown__menu"><li><a href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces" target="_self" rel="noopener noreferrer" class="dropdown__link dropdown__link--active" lang="es-ES">Español</a></li><li><a href="/zh-hk/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces" target="_self" rel="noopener noreferrer" class="dropdown__link" lang="zh-HK">繁體中文</a></li><li><a href="/en/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces" target="_self" rel="noopener noreferrer" class="dropdown__link" lang="en-US">English</a></li></ul></div><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS darkNavbarColorModeToggle_X3D1" type="button" disabled="" title="Cambiar entre modo oscuro y claro (actualmente modo claro)" aria-label="Cambiar entre modo oscuro y claro (actualmente modo claro)" aria-live="polite"><svg viewBox="0 0 24 24" width="24" height="24" class="lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" class="darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Volver al principio" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd sidebarWithHideableNavbar_wUlq"><a tabindex="-1" class="sidebarLogo_isFc" href="/"><img src="https://github.com/tianrking.png" alt="Logo de El Jardín Secreto" class="themedComponent__dKv themedComponent--light_rzkv"><img src="https://github.com/tianrking.png" alt="Logo de El Jardín Secreto" class="themedComponent__dKv themedComponent--dark_mMAk"><b>🌵 El Jardín Secreto 🌵</b></a><nav aria-label="Barra lateral de Documentos" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/tutorial">Tutorial</a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces">Micro-Controladores</a></div><ul style="display:block;overflow:visible;height:auto" class="menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="true" tabindex="0" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces">CN</a></div><ul style="display:block;overflow:visible;height:auto" class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces"> </a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/micro-controladores/CN/bouffalo-network-interfaces">Exploring Network Interfaces on Bouffalo MCUs</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/micro-controladores/CN/embedded-development-board-uart-rts">UART RTS Troubleshooting Guide for Embedded Development Boards</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/micro-controladores/CN/bouffalo-BL602-AI-WB2-32s">Bouffalo BL602 AI-WB2-32S 使用指南 | Bouffalo BL602 AI-WB2-32S User Guide</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/micro-controladores/CN/bouffalo-BL616-AI-M62-32s">Bouffalo BL616 AI-M62-32S 使用指南 | Bouffalo BL616 AI-M62-32S User Guide</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/micro-controladores/CN/bouffalo-BL618-Sipeed-M0P-Dock">Bouffalo BL618 Sipeed M0P Dock 使用指南 | Bouffalo BL618 Sipeed M0P Dock User Guide</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/micro-controladores/CN/winnermicro-XT-E804-HLK-W801-Kit">Winnermicro XT-E804 HLK-W801 Kit 使用指南 | Winnermicro XT-E804 HLK-W801 Kit User Guide</a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="true" tabindex="0" href="/micro-controladores/STM32/desarrollo-cdc-stm32cubemx">STM32</a></div><ul style="display:block;overflow:visible;height:auto" class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/micro-controladores/STM32/desarrollo-cdc-stm32cubemx">Desarrollo de comunicación CDC con STM32CubeMX</a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" tabindex="0" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces">ESP32</a></div><ul style="display:block;overflow:visible;height:auto" class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces"> </a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces">Exploring WiFi Interfaces in ESP-IDF 5.3</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/micro-controladores/ESP32/esp32-programming-examples-guide">ESP32 編程示例指南 | Guía de Ejemplos de Programación para ESP32</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/micro-controladores/ESP32/esp32-lista-de-ejemplos-de-programacion">Guía de Ejemplos de Programación para ESP32 | ESP32 编程示例指南</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/micro-controladores/ESP32/esp32-mcpwm-usage-and-examples">ESP32 MCPWM Usage Guide and Examples | ESP32 MCPWM 使用指南與範例</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/micro-controladores/ESP32/esp32-rp2040-nrf24l01-wireless-communication">ESP32 and RP2040 Wireless Communication with NRF24L01 | ESP32 與 RP2040 使用 NRF24L01 無線通信模組指南</a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="true" tabindex="0" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces">RP2040</a></div><ul style="display:block;overflow:visible;height:auto" class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces"> </a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/micro-controladores/RP2040/rp2040-uart-interrupt-handling-and-usage">UART Interrupt Handling and Data Transmission in RP2040</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/micro-controladores/RP2040/rp2040-pwm-usage-and-examples">Detailed Explanation of PWM Usage and Examples in RP2040</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/micro-controladores/RP2040/rp2040-timer-and-alarm-usage">Timer and Alarm Usage in RP2040</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/micro-controladores/RP2040/mastering-pio-programming-rp2040">Mastering PIO Programming on RP2040</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/micro-controladores/RP2040/pio-uart-implementation-rp2040">Implementing UART (TX )with PIO on RP2040</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/micro-controladores/RP2040/advanced-pio-led-control-resource-management-rp2040">Advanced PIO LED Control and Resource Management on RP2040</a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/micro-controladores/RP2040/rp2040-rf24-demo">rp2040-rf24-demo</a></li></ul></li></ul></li></ul></nav><button type="button" title="Colapsar barra lateral" aria-label="Colapsar barra lateral" class="button button--secondary button--outline collapseSidebarButton_PEFL"><svg width="20" height="20" aria-hidden="true" class="collapseSidebarButtonIcon_kv0_"><g fill="#7a7a7a"><path d="M9.992 10.023c0 .2-.062.399-.172.547l-4.996 7.492a.982.982 0 01-.828.454H1c-.55 0-1-.453-1-1 0-.2.059-.403.168-.551l4.629-6.942L.168 3.078A.939.939 0 010 2.528c0-.548.45-.997 1-.997h2.996c.352 0 .649.18.828.45L9.82 9.472c.11.148.172.347.172.55zm0 0"></path><path d="M19.98 10.023c0 .2-.058.399-.168.547l-4.996 7.492a.987.987 0 01-.828.454h-3c-.547 0-.996-.453-.996-1 0-.2.059-.403.168-.551l4.625-6.942-4.625-6.945a.939.939 0 01-.168-.55 1 1 0 01.996-.997h3c.348 0 .649.18.828.45l4.996 7.492c.11.148.168.347.168.55zm0 0"></path></g></svg></button></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs" itemscope="" itemtype="https://schema.org/BreadcrumbList"><li class="breadcrumbs__item"><a aria-label="Página de Inicio" class="breadcrumbs__link" href="/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">Micro-Controladores</span><meta itemprop="position" content="1"></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">ESP32</span><meta itemprop="position" content="2"></li><li itemscope="" itemprop="itemListElement" itemtype="https://schema.org/ListItem" class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link" itemprop="name">Exploring WiFi Interfaces in ESP-IDF 5.3</span><meta itemprop="position" content="3"></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">En esta página</button></div><div class="theme-doc-markdown markdown"><h1>ESP-IDF5.3</h1>
+<p><a href="https://github.com/espressif/esp-idf/tree/dbce23f8a449eb436b0b574726fe6ce9a6df67cc" target="_blank" rel="noopener noreferrer">https://github.com/espressif/esp-idf/tree/dbce23f8a449eb436b0b574726fe6ce9a6df67cc</a></p>
+<p><a href="https://github.com/espressif/esp-idf/tree/release/v5.3" target="_blank" rel="noopener noreferrer">https://github.com/espressif/esp-idf/tree/release/v5.3</a></p>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="esp_nowh-头文件  中的所有接口包括形参返回值等信息"><code>esp_now.h</code> 头文件中的所有接口,包括形参、返回值等信息:<a class="hash-link" aria-label="Enlace directo al esp_nowh-头文件中的所有接口包括形参返回值等信息" title="Enlace directo al esp_nowh-头文件中的所有接口包括形参返回值等信息" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces#esp_nowh-头文件中的所有接口包括形参返回值等信息">​</a></h2>
+<ol>
+<li>
+<p><strong>状态码定义</strong>:</p>
+<ul>
+<li><code>ESP_ERR_ESPNOW_BASE</code>: ESPNOW 错误码基数</li>
+<li><code>ESP_ERR_ESPNOW_NOT_INIT</code>: ESPNOW 未初始化</li>
+<li><code>ESP_ERR_ESPNOW_ARG</code>: 参数无效</li>
+<li><code>ESP_ERR_ESPNOW_NO_MEM</code>: 内存不足</li>
+<li><code>ESP_ERR_ESPNOW_FULL</code>: ESPNOW 对等节点列表已满</li>
+<li><code>ESP_ERR_ESPNOW_NOT_FOUND</code>: 找不到 ESPNOW 对等节点</li>
+<li><code>ESP_ERR_ESPNOW_INTERNAL</code>: 内部错误</li>
+<li><code>ESP_ERR_ESPNOW_EXIST</code>: ESPNOW 对等节点已存在</li>
+<li><code>ESP_ERR_ESPNOW_IF</code>: 接口错误</li>
+<li><code>ESP_ERR_ESPNOW_CHAN</code>: 信道错误</li>
+</ul>
+</li>
+<li>
+<p><strong>常量定义</strong>:</p>
+<ul>
+<li><code>ESP_NOW_ETH_ALEN</code>: ESPNOW 对等节点 MAC 地址长度</li>
+<li><code>ESP_NOW_KEY_LEN</code>: ESPNOW 对等节点本地主密钥长度</li>
+<li><code>ESP_NOW_MAX_TOTAL_PEER_NUM</code>: ESPNOW 总对等节点最大数量</li>
+<li><code>ESP_NOW_MAX_ENCRYPT_PEER_NUM</code>: ESPNOW 加密对等节点最大数量</li>
+<li><code>ESP_NOW_MAX_DATA_LEN</code>: ESPNOW 数据最大长度</li>
+</ul>
+</li>
+<li>
+<p><strong>数据结构定义</strong>:</p>
+<ul>
+<li><code>esp_now_send_status_t</code>: ESPNOW 数据发送状态</li>
+<li><code>esp_now_peer_info_t</code>: ESPNOW 对等节点信息参数</li>
+<li><code>esp_now_peer_num_t</code>: ESPNOW 对等节点数量</li>
+<li><code>esp_now_recv_info_t</code>: ESPNOW 数据包信息</li>
+<li><code>esp_now_rate_config_t</code>: ESPNOW 数 据率配置</li>
+</ul>
+</li>
+<li>
+<p><strong>回调函数定义</strong>:</p>
+<ul>
+<li><code>esp_now_recv_cb_t(const esp_now_recv_info_t * esp_now_info, const uint8_t *data, int data_len)</code>: 接收 ESPNOW 数据的回调函数</li>
+<li><code>esp_now_send_cb_t(const uint8_t *mac_addr, esp_now_send_status_t status)</code>: 发送 ESPNOW 数据的回调函数</li>
+</ul>
+</li>
+<li>
+<p><strong>接口定义</strong>:</p>
+<ul>
+<li><code>esp_err_t esp_now_init(void)</code>: 初始化 ESPNOW</li>
+<li><code>esp_err_t esp_now_deinit(void)</code>: 反初始化 ESPNOW</li>
+<li><code>esp_err_t esp_now_get_version(uint32_t *version)</code>: 获取 ESPNOW 版本</li>
+<li><code>esp_err_t esp_now_register_recv_cb(esp_now_recv_cb_t cb)</code>: 注册接收 ESPNOW 数据的回调函数</li>
+<li><code>esp_err_t esp_now_unregister_recv_cb(void)</code>: 注销接收 ESPNOW 数据的回调函数</li>
+<li><code>esp_err_t esp_now_register_send_cb(esp_now_send_cb_t cb)</code>: 注册发送 ESPNOW 数据的回调函数</li>
+<li><code>esp_err_t esp_now_unregister_send_cb(void)</code>: 注销发送 ESPNOW 数据的回调函数</li>
+<li><code>esp_err_t esp_now_send(const uint8_t *peer_addr, const uint8_t *data, size_t len)</code>: 发送 ESPNOW 数据</li>
+<li><code>esp_err_t esp_now_add_peer(const esp_now_peer_info_t *peer)</code>: 添加 ESPNOW 对等节点</li>
+<li><code>esp_err_t esp_now_del_peer(const uint8_t *peer_addr)</code>: 删除 ESPNOW 对等节点</li>
+<li><code>esp_err_t esp_now_mod_peer(const esp_now_peer_info_t *peer)</code>: 修改 ESPNOW 对等节点</li>
+<li><code>esp_err_t esp_wifi_config_espnow_rate(wifi_interface_t ifx, wifi_phy_rate_t rate)</code>: 配置 ESPNOW 数据率 (已弃用,建议使用 <code>esp_now_set_peer_rate_config()</code>)</li>
+<li><code>esp_err_t esp_now_set_peer_rate_config(const uint8_t *peer_addr, esp_now_rate_config_t *config)</code>: 设置 ESPNOW 对等节点的数据率配置</li>
+<li><code>esp_err_t esp_now_get_peer(const uint8_t *peer_addr, esp_now_peer_info_t *peer)</code>: 获取 ESPNOW 对等节点</li>
+<li><code>esp_err_t esp_now_fetch_peer(bool from_head, esp_now_peer_info_t *peer)</code>: 从对等节点列表中获取一个对等节点</li>
+<li><code>bool esp_now_is_peer_exist(const uint8_t *peer_addr)</code>: 检查 ESPNOW 对等节点是否存在</li>
+<li><code>esp_err_t esp_now_get_peer_num(esp_now_peer_num_t *num)</code>: 获取 ESPNOW 对等节点的数量</li>
+<li><code>esp_err_t esp_now_set_pmk(const uint8_t *pmk)</code>: 设置主密钥</li>
+<li><code>esp_err_t esp_now_set_wake_window(uint16_t window)</code>: 设置 ESPNOW 唤醒窗口</li>
+</ul>
+</li>
+</ol>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="esp_smartconfigh-头文件的内容"><code>esp_smartconfig.h</code> 头文件的内容:<a class="hash-link" aria-label="Enlace directo al esp_smartconfigh-头文件的内容" title="Enlace directo al esp_smartconfigh-头文件的内容" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces#esp_smartconfigh-头文件的内容">​</a></h2>
+<ol>
+<li>
+<p><strong>枚举定义</strong>:</p>
+<ul>
+<li><code>smartconfig_type_t</code>: SmartConfig 协议类型,包括 ESPTouch、AirKiss、ESPTouch+AirKiss、ESPTouch V2</li>
+<li><code>smartconfig_event_t</code>: SmartConfig 事件类型,包括扫描完成、找到信道、获取 SSID/密码、发送 ACK 完成</li>
+</ul>
+</li>
+<li>
+<p><strong>数据结构定义</strong>:</p>
+<ul>
+<li><code>smartconfig_event_got_ssid_pswd_t</code>: SC_EVENT_GOT_SSID_PSWD 事件的参数结构体,包括 SSID、密码、BSSID、协议类型、token、手机 IP 等</li>
+<li><code>smartconfig_start_config_t</code>: esp_smartconfig_start() 的配置参数,包括是否打印日志、是否启用 ESPTouch V2 加密、ESPTouch V2 加密密钥</li>
+</ul>
+</li>
+<li>
+<p><strong>宏定义</strong>:</p>
+<ul>
+<li><code>SMARTCONFIG_START_CONFIG_DEFAULT()</code>: 提供了 <code>smartconfig_start_config_t</code> 的默认值</li>
+</ul>
+</li>
+<li>
+<p><strong>接口定义</strong>:</p>
+<ul>
+<li><code>const char *esp_smartconfig_get_version(void)</code>: 获  取 SmartConfig 的版本号</li>
+<li><code>esp_err_t esp_smartconfig_start(const smartconfig_start_config_t *config)</code>: 启动 SmartConfig 过程</li>
+<li><code>esp_err_t esp_smartconfig_stop(void)</code>: 停止 SmartConfig 过程</li>
+<li><code>esp_err_t esp_esptouch_set_timeout(uint8_t time_s)</code>: 设置 SmartConfig 超时时间</li>
+<li><code>esp_err_t esp_smartconfig_set_type(smartconfig_type_t type)</code>: 设置 SmartConfig 协议类型</li>
+<li><code>esp_err_t esp_smartconfig_fast_mode(bool enable)</code>: 设置 SmartConfig 为快速模式</li>
+<li><code>esp_err_t esp_smartconfig_get_rvd_data(uint8_t *rvd_data, uint8_t len)</code>: 获取 ESPTouch V2 保留数据</li>
+</ul>
+</li>
+</ol>
+<p>总的来说,这个头文件提供了 SmartConfig 功能的各种配置和控制接口,包括启动/停止 SmartConfig、设置协议类型和超时时间、获取保留数据等,为我们使用 SmartConfig 功能提供了全面的支持。这些接口可能会在实现网络报文分析相关功能时派上用场,比如在 ESPNOW 示例中就使用了 SmartConfig 功能来连接目标 AP。</p>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="esp_meshh-头文件的内容"><code>esp_mesh.h</code> 头文件的内容:<a class="hash-link" aria-label="Enlace directo al esp_meshh-头文件的内容" title="Enlace directo al esp_meshh-头文件的内容" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces#esp_meshh-头文件的内容">​</a></h2>
+<ol>
+<li>
+<p><strong>常量定义</strong>:</p>
+<ul>
+<li><code>MESH_ROOT_LAYER</code>: 根节点层数</li>
+<li><code>MESH_MTU</code>: 最大传输单元</li>
+<li><code>MESH_MPS</code>: 最大负载大小</li>
+<li><code>ESP_ERR_MESH_*</code>: Mesh 错误码定义</li>
+</ul>
+</li>
+<li>
+<p><strong>宏定义</strong>:</p>
+<ul>
+<li><code>MESH_DATA_*</code>: Mesh 数据包标识位</li>
+<li><code>MESH_OPT_*</code>: Mesh 数据包选项定义</li>
+<li><code>MESH_ASSOC_FLAG_*</code>: Mesh 网络 IE 标志位</li>
+</ul>
+</li>
+<li>
+<p><strong>枚举定义</strong>:</p>
+<ul>
+<li><code>mesh_event_id_t</code>: Mesh 事件类型</li>
+<li><code>mesh_type_t</code>: 设备类型</li>
+<li><code>mesh_proto_t</code>: 传输协议类型</li>
+<li><code>mesh_tos_t</code>: 传输服务类型</li>
+<li><code>mesh_vote_reason_t</code>: 投票原因</li>
+<li><code>mesh_disconnect_reason_t</code>: 断开连接原因</li>
+<li><code>esp_mesh_topology_t</code>: Mesh 拓扑类型</li>
+</ul>
+</li>
+<li>
+<p><strong>数据结构定义</strong>:</p>
+<ul>
+<li><code>mip_t</code>: IP 地址和端口</li>
+<li><code>mesh_addr_t</code>: Mesh 地址</li>
+<li><code>mesh_event_*_t</code>: Mesh 事件数据结构</li>
+<li><code>mesh_opt_t</code>: Mesh 数据包选项</li>
+<li><code>mesh_data_t</code>: Mesh 数据包</li>
+<li><code>mesh_router_t</code>: 路由器配置</li>
+<li><code>mesh_ap_cfg_t</code>: Mesh softAP 配置</li>
+<li><code>mesh_cfg_t</code>: Mesh 初始化配置</li>
+<li><code>mesh_rc_config_t</code>: 投票地址配置</li>
+<li><code>mesh_vote_t</code>: 投票配置</li>
+<li><code>mesh_tx_pending_t</code>: 发送队列信息</li>
+<li><code>mesh_rx_pending_t</code>: 接收队列信息</li>
+</ul>
+</li>
+<li>
+<p><strong>全局变量</strong>:</p>
+<ul>
+<li><code>g_wifi_default_mesh_crypto_funcs</code>: 默认的 Mesh IE 加密回调函数</li>
+<li><code>MESH_INIT_CONFIG_DEFAULT()</code>: Mesh 初始化配置默认值</li>
+</ul>
+</li>
+<li>
+<p><strong>接口定义</strong>:</p>
+<ul>
+<li><code>esp_mesh_init()</code>: 初始化 Mesh</li>
+<li><code>esp_mesh_deinit()</code>: 反初始化 Mesh</li>
+<li><code>esp_mesh_start()</code>: 启动 Mesh</li>
+<li><code>esp_mesh_stop()</code>: 停止 Mesh</li>
+<li><code>esp_mesh_send()</code>: 发送 Mesh 数据包</li>
+<li><code>esp_mesh_send_block_time()</code>: 设置 <code>esp_mesh_send()</code> 的阻塞时间</li>
+<li><code>esp_mesh_recv()</code>: 接收 Mesh 数据包</li>
+<li><code>esp_mesh_recv_toDS()</code>: 接收目的地为外部网络的 Mesh 数据包</li>
+<li><code>esp_mesh_set_config()</code>: 设置 Mesh 配置</li>
+<li><code>esp_mesh_get_config()</code>: 获取 Mesh 配置</li>
+<li><code>esp_mesh_set_router()</code>: 设置路由器配置</li>
+<li><code>esp_mesh_get_router()</code>: 获取路由器配置</li>
+<li><code>esp_mesh_set_id()</code>: 设置 Mesh 网络 ID</li>
+<li><code>esp_mesh_get_id()</code>: 获取 Mesh 网络 ID</li>
+<li>一系列 <code>esp_mesh_set_*()</code> 和 <code>esp_mesh_get_*()</code> 函数用于配置和获取 Mesh 参数</li>
+<li><code>esp_mesh_waive_root()</code>: 要求根节点放弃根节点地位</li>
+<li><code>esp_mesh_set_vote_percentage()</code>: 设置投票百分比阈值</li>
+<li><code>esp_mesh_get_vote_percentage()</code>: 获取投票百分比阈值</li>
+<li><code>esp_mesh_post_toDS_state()</code>: 发布 toDS 状态</li>
+<li><code>esp_mesh_get_tx_pending()</code>: 获取发送队列信息</li>
+<li><code>esp_mesh_get_rx_pending()</code>: 获取接收队列信息</li>
+<li><code>esp_mesh_available_txupQ_num()</code>: 获取某个地址的发送队列容量</li>
+<li><code>esp_mesh_set_xon_qsize()</code>: 设置接收队列大小</li>
+<li><code>esp_mesh_get_xon_qsize()</code>: 获取接收队列大小</li>
+<li><code>esp_mesh_allow_root_conflicts()</code>: 允许网络中存在多个根节点</li>
+<li><code>esp_mesh_is_root_conflicts_allowed()</code>: 检查是否允许网络中存在多个根节点</li>
+<li>一系列 <code>esp_mesh_set_group_id()</code>, <code>esp_mesh_delete_group_id()</code>, <code>esp_mesh_get_group_num()</code>, <code>esp_mesh_get_group_list()</code>, <code>esp_mesh_is_my_group()</code> 用于管理组 ID</li>
+<li><code>esp_mesh_set_capacity_num()</code>: 设置 Mesh 网络容量</li>
+<li><code>esp_mesh_get_capacity_num()</code>: 获取 Mesh 网络容量</li>
+<li><code>esp_mesh_set_ie_crypto_funcs()</code>: 设置 Mesh IE 加密函数</li>
+<li><code>esp_mesh_set_ie_crypto_key()</code>: 设置 Mesh IE 加密密钥</li>
+<li><code>esp_mesh_get_ie_crypto_key()</code>: 获取 Mesh IE 加密密钥</li>
+<li><code>esp_mesh_set_root_healing_delay()</code>: 设置根节点重连延迟</li>
+<li><code>esp_mesh_get_root_healing_delay()</code>: 获取根节点重连延迟</li>
+<li><code>esp_mesh_fix_root()</code>: 固定根节点</li>
+<li><code>esp_mesh_is_root_fixed()</code>: 检查是否固定根节点</li>
+<li><code>esp_mesh_set_parent()</code>: 设置父节点</li>
+<li><code>esp_mesh_scan_get_ap_ie_len()</code>: 获取 Mesh 网络 IE 长度</li>
+<li><code>esp_mesh_scan_get_ap_record()</code>: 获取 AP 记录</li>
+<li><code>esp_mesh_flush_upstream_packets()</code>: 刷新上行数据包</li>
+<li><code>esp_mesh_get_subnet_nodes_num()</code>: 获取子网节点数量</li>
+<li><code>esp_mesh_get_subnet_nodes_list()</code>: 获取子网节点列表</li>
+<li><code>esp_mesh_disconnect()</code>: 断开连接</li>
+<li><code>esp_mesh_connect()</code>: 连接</li>
+<li><code>esp_mesh_flush_scan_result()</code>: 刷新扫描结果</li>
+<li><code>esp_mesh_switch_channel()</code>: 切换信道</li>
+<li><code>esp_mesh_get_router_bssid()</code>: 获取路由器 BSSID</li>
+<li><code>esp_mesh_get_tsf_time()</code>: 获取 TSF 时间</li>
+<li><code>esp_mesh_set_topology()</code>: 设置 Mesh 拓扑</li>
+<li><code>esp_mesh_get_topology()</code>: 获取 Mesh 拓扑</li>
+<li><code>esp_mesh_enable_ps()</code>: 启用 Mesh 节能模式</li>
+<li><code>esp_mesh_disable_ps()</code>: 禁用 Mesh 节能模式</li>
+<li><code>esp_mesh_is_ps_enabled()</code>: 检查节能模式是否启用</li>
+<li><code>esp_mesh_is_device_active()</code>: 检查设备是否处于活跃状态</li>
+<li><code>esp_mesh_set_active_duty_cycle()</code>: 设置设备工作占空比</li>
+<li><code>esp_mesh_get_active_duty_cycle()</code>: 获取设备工作占空比</li>
+<li><code>esp_mesh_set_network_duty_cycle()</code>: 设置网络工作占空比</li>
+<li><code>esp_mesh_get_network_duty_cycle()</code>: 获取网络工作占空比</li>
+<li><code>esp_mesh_get_running_active_duty_cycle()</code>: 获取当前运行的工作占空比</li>
+<li><code>esp_mesh_ps_duty_signaling()</code>: 发送工作占空比信号</li>
+</ul>
+</li>
+</ol>
+<p>总的来说,这个头文件定义 了 Mesh 网络的各种配置、管理和数据传输相关的功能接口,为我们提供了一个全面的 Mesh 网络编程接口。这些接口可以为我们实现基于 Mesh 网络的网络报文分析功能提供重要的支持。</p>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="esp_mesh_internalh-头文件定义了一些-mesh-内部的数据结构和函数"><code>esp_mesh_internal.h</code> 头文件定义了一些 Mesh 内部的数据结构和函数:<a class="hash-link" aria-label="Enlace directo al esp_mesh_internalh-头文件定义了一些-mesh-内部的数据结构和函数" title="Enlace directo al esp_mesh_internalh-头文件定义了一些-mesh-内部的数据结构和函数" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces#esp_mesh_internalh-头文件定义了一些-mesh-内部的数据结构和函数">​</a></h2>
+<ol>
+<li>
+<p><strong>数据结构定义</strong>:</p>
+<ul>
+<li><code>mesh_attempts_t</code>: Mesh 自组织网络中的尝试次数相关参数</li>
+<li><code>mesh_switch_parent_t</code>: Mesh 切换父节点相关的参数</li>
+<li><code>mesh_rssi_threshold_t</code>: Mesh 的 RSSI 阈值</li>
+<li><code>mesh_assoc_t</code>: Mesh 网络 IE 的数据结构</li>
+<li><code>mesh_chain_layer_t</code>: Mesh 链式拓扑的层数信息</li>
+<li><code>mesh_chain_assoc_t</code>: Mesh 链式拓扑的关联信息</li>
+<li><code>esp_mesh_ps_duties_t</code>: Mesh 节能模式下的工作占空比信息</li>
+</ul>
+</li>
+<li>
+<p><strong>接口定义</strong>:</p>
+<ul>
+<li><code>esp_mesh_set_beacon_interval()</code>: 设置 Mesh softAP 的 beacon 间隔</li>
+<li><code>esp_mesh_get_beacon_interval()</code>: 获取 Mesh softAP 的 beacon 间隔</li>
+<li><code>esp_mesh_set_attempts()</code>: 设置 Mesh 自组织网络的尝试次数</li>
+<li><code>esp_mesh_get_attempts()</code>: 获取 Mesh 自组织网络的尝试次数</li>
+<li><code>esp_mesh_set_switch_parent_paras()</code>: 设置切换父节点的相关参数</li>
+<li><code>esp_mesh_get_switch_parent_paras()</code>: 获取 切换父节点的相关参数</li>
+<li><code>esp_mesh_set_rssi_threshold()</code>: 设置当前父节点的 RSSI 阈值</li>
+<li><code>esp_mesh_get_rssi_threshold()</code>: 获取当前父节点的 RSSI 阈值</li>
+<li><code>esp_mesh_set_6m_rate()</code>: 启用最小数据率为 6Mbps</li>
+<li><code>esp_mesh_print_txQ_waiting()</code>: 打印发送队列的等待情况</li>
+<li><code>esp_mesh_print_rxQ_waiting()</code>: 打印接收队列的等待情况</li>
+<li><code>esp_mesh_set_passive_scan_time()</code>: 设置被动扫描时间</li>
+<li><code>esp_mesh_get_passive_scan_time()</code>: 获取被动扫描时间</li>
+<li><code>esp_mesh_set_announce_interval()</code>: 设置广播间隔</li>
+<li><code>esp_mesh_get_announce_interval()</code>: 获取广播间隔</li>
+<li><code>esp_mesh_ps_get_duties()</code>: 获取设备、父节点和子节点的工作占空比</li>
+<li><code>esp_mesh_print_scan_result()</code>: 启用/禁用 Mesh 扫描结果打印</li>
+</ul>
+</li>
+</ol>
+<p>总的来说,这个头文件定义了一些 Mesh 内部使用的数据结构和函数,包括网络尝试次数、父节点切换、RSSI 阈值、数据率限制、队列监控、扫描时间、广播间隔、节能模式工作占空比等。这些内部接口可能会在实现网络报文分析功能时提供一些参考和支持。</p>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="esp_wifih-头文件定义了-esp-idf-wi-fi-编程的各种接口和功能"><code>esp_wifi.h</code> 头文件定义了 ESP-IDF Wi-Fi 编程的各种接口和功能:<a class="hash-link" aria-label="Enlace directo al esp_wifih-头文件定义了-esp-idf-wi-fi-编程的各种接口和功能" title="Enlace directo al esp_wifih-头文件定义了-esp-idf-wi-fi-编程的各种接口和功能" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces#esp_wifih-头文件定义了-esp-idf-wi-fi-编程的各种接口和功能">​</a></h2>
+<ol>
+<li>
+<p><strong>错误码定义</strong>:</p>
+<ul>
+<li><code>ESP_ERR_WIFI_*</code>: 定义了各种 Wi-Fi 相关的 错误码</li>
+</ul>
+</li>
+<li>
+<p><strong>Wi-Fi 初始化配置</strong>:</p>
+<ul>
+<li><code>wifi_init_config_t</code>: Wi-Fi 初始化配置结构体</li>
+<li><code>WIFI_INIT_CONFIG_DEFAULT()</code>: 提供了默认的初始化配置</li>
+</ul>
+</li>
+<li>
+<p><strong>Wi-Fi 基本功能</strong>:</p>
+<ul>
+<li><code>esp_wifi_init()</code>: 初始化 Wi-Fi</li>
+<li><code>esp_wifi_deinit()</code>: 反初始化 Wi-Fi</li>
+<li><code>esp_wifi_set_mode()</code>: 设置 Wi-Fi 工作模式</li>
+<li><code>esp_wifi_get_mode()</code>: 获取 Wi-Fi 工作模式</li>
+<li><code>esp_wifi_start()</code>: 启动 Wi-Fi</li>
+<li><code>esp_wifi_stop()</code>: 停止 Wi-Fi</li>
+<li><code>esp_wifi_restore()</code>: 恢复 Wi-Fi 配置到默认值</li>
+</ul>
+</li>
+<li>
+<p><strong>Wi-Fi 连接管理</strong>:</p>
+<ul>
+<li><code>esp_wifi_connect()</code>: 连接 AP</li>
+<li><code>esp_wifi_disconnect()</code>: 断开 AP 连接</li>
+<li><code>esp_wifi_deauth_sta()</code>: 去认证某个 STA</li>
+</ul>
+</li>
+<li>
+<p><strong>Wi-Fi 扫描</strong>:</p>
+<ul>
+<li><code>esp_wifi_scan_start()</code>: 开始扫描</li>
+<li><code>esp_wifi_set_scan_parameters()</code>: 设置扫描参数</li>
+<li><code>esp_wifi_get_scan_parameters()</code>: 获取扫描参数</li>
+<li><code>esp_wifi_scan_stop()</code>: 停止扫描</li>
+<li><code>esp_wifi_scan_get_ap_num()</code>: 获取扫描结果数量</li>
+<li><code>esp_wifi_scan_get_ap_records()</code>: 获取扫描结果</li>
+<li><code>esp_wifi_scan_get_ap_record()</code>: 逐个获取扫描结果</li>
+<li><code>esp_wifi_clear_ap_list()</code>: 清除扫描结果</li>
+</ul>
+</li>
+<li>
+<p><strong>Wi-Fi 配置管理</strong>:</p>
+<ul>
+<li><code>esp_wifi_sta_get_ap_info()</code>: 获取连接 AP 的信息</li>
+<li><code>esp_wifi_set_ps()</code>: 设置省电模式</li>
+<li><code>esp_wifi_get_ps()</code>: 获取省电模式</li>
+<li><code>esp_wifi_set_protocol()</code>: 设置协议模式</li>
+<li><code>esp_wifi_get_protocol()</code>: 获取协议模式</li>
+<li><code>esp_wifi_set_bandwidth()</code>: 设置带宽</li>
+<li><code>esp_wifi_get_bandwidth()</code>: 获取带宽</li>
+<li><code>esp_wifi_set_channel()</code>: 设置信道</li>
+<li><code>esp_wifi_get_channel()</code>: 获取信道</li>
+<li><code>esp_wifi_set_country()</code>: 设置国家码</li>
+<li><code>esp_wifi_get_country()</code>: 获取国家码</li>
+</ul>
+</li>
+<li>
+<p><strong>Wi-Fi MAC 地址管理</strong>:</p>
+<ul>
+<li><code>esp_wifi_set_mac()</code>: 设置 MAC 地址</li>
+<li><code>esp_wifi_get_mac()</code>: 获取 MAC 地址</li>
+</ul>
+</li>
+<li>
+<p><strong>Wi-Fi 监听模式</strong>:</p>
+<ul>
+<li><code>esp_wifi_set_promiscuous_rx_cb()</code>: 注册监听模式下的接收回调</li>
+<li><code>esp_wifi_set_promiscuous()</code>: 启用/禁用监听模式</li>
+<li><code>esp_wifi_get_promiscuous()</code>: 获取监听模式状态</li>
+<li><code>esp_wifi_set_promiscuous_filter()</code>: 设置监听模式下的数据包过滤器</li>
+<li><code>esp_wifi_get_promiscuous_filter()</code>: 获取监听模式下的数据包过滤器</li>
+<li><code>esp_wifi_set_promiscuous_ctrl_filter()</code>: 设置监听模式下的控制帧过滤器</li>
+<li><code>esp_wifi_get_promiscuous_ctrl_filter()</code>: 获取监听模式下的控制帧过滤器</li>
+</ul>
+</li>
+<li>
+<p><strong>Wi-Fi 数据发送/接收</strong>:</p>
+<ul>
+<li><code>esp_wifi_80211_tx()</code>: 发送原始 802.11 数据包</li>
+</ul>
+</li>
+<li>
+<p><strong>Wi-Fi 扩展功能</strong>:</p>
+<ul>
+<li><code>esp_wifi_set_vendor_ie()</code>: 设置 Vendor-Specific IE</li>
+<li><code>esp_wifi_set_vendor_ie_cb()</code>: 注册 Vendor-Specific IE 回调</li>
+<li><code>esp_wifi_set_max_tx_power()</code>: 设置最大发射功率</li>
+<li><code>esp_wifi_get_max_tx_power()</code>: 获取最大发射功率</li>
+<li><code>esp_wifi_set_event_mask()</code>: 设置 Wi-Fi 事件屏蔽</li>
+<li><code>esp_wifi_get_event_mask()</code>: 获取 Wi-Fi 事件屏蔽</li>
+</ul>
+</li>
+</ol>
+<p>这个头文件提供了丰富的 Wi-Fi 编程接口,包括基础的初始化、模式设置、连接管理,以及高级功能如监听  模式、数据发送/接收等。这些接口为我们使用 ESP-IDF 进行网络报文分析提供了重要的基础支持。</p>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="esp_wifi_ap_get_sta_listh-头文件定义了一些与-wi-fi-相关的数据类型和宏定义"><code>esp_wifi_ap_get_sta_list.h</code> 头文件定义了一些与 Wi-Fi 相关的数据类型和宏定义:<a class="hash-link" aria-label="Enlace directo al esp_wifi_ap_get_sta_listh-头文件定义了一些与-wi-fi-相关的数据类型和宏定义" title="Enlace directo al esp_wifi_ap_get_sta_listh-头文件定义了一些与-wi-fi-相关的数据类型和宏定义" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces#esp_wifi_ap_get_sta_listh-头文件定义了一些与-wi-fi-相关的数据类型和宏定义">​</a></h2>
+<ol>
+<li>
+<p><strong>数据类型定义</strong>:</p>
+<ul>
+<li><code>wifi_sta_list_t</code>: 与连接到 AP 的 STA 相关的数据结构。</li>
+</ul>
+</li>
+<li>
+<p><strong>宏定义</strong>:</p>
+<ul>
+<li><code>ESP_WIFI_MAX_CONN_NUM</code>: 最大支持的 Wi-Fi 连接数。如果目标设备没有原生 Wi-Fi 支持且没有使用 <code>wifi_remote</code> 组件,则默认为 15。</li>
+</ul>
+</li>
+<li>
+<p><strong>新增数据结构</strong>:</p>
+<ul>
+<li><code>wifi_sta_mac_ip_list_t</code>: 包含 AP 所连接的 STA 的 MAC 地址和 IP 地址信息。</li>
+</ul>
+</li>
+<li>
+<p><strong>新增接口</strong>:</p>
+<ul>
+<li><code>esp_wifi_ap_get_sta_list_with_ip()</code>: 获取 AP 所连接的 STA 的 MAC 地址和 IP 地址信息。</li>
+</ul>
+</li>
+</ol>
+<p>这个头文件主要定义了与连接到 AP 的 STA 相关的数据结构和接口。与前面分析的 <code>esp_wifi.h</code> 头文件相比,这个头文件更加集中于 AP 模式下的 STA 管理功能。</p>
+<p>值得注意的是,<code>esp_wifi_ap_get_sta_list_with_ip()</code> 接口可以获取 STA 的 IP 地址信息,前提是 LwIP 的 DHCP 服务器功能 (<code>CONFIG_LWIP_DHCPS</code>) 已经开启。这对于我们进行网络  报文分析可能会有用,比如可以根据 STA 的 IP 地址信息对报文进行过滤和分类。</p>
+<p>总的来说,这个头文件为我们提供了一些与 AP 模式下 STA 管理相关的功能支持,可以作为我们分析网络报文的补充。</p>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="esp_wifi_crypto_typesh-头文件定义了一些与-wifi-加密相关的数据结构和回调函数类型"><code>esp_wifi_crypto_types.h</code> 头文件定义了一些与 WiFi 加密相关的数据结构和回调函数类型:<a class="hash-link" aria-label="Enlace directo al esp_wifi_crypto_typesh-头文件定义了一些与-wifi-加密相关的数据结构和回调函数类型" title="Enlace directo al esp_wifi_crypto_typesh-头文件定义了一些与-wifi-加密相关的数据结构和回调函数类型" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces#esp_wifi_crypto_typesh-头文件定义了一些与-wifi-加密相关的数据结构和回调函数类型">​</a></h2>
+<ol>
+<li>
+<p><strong>加密算法枚举</strong>:</p>
+<ul>
+<li><code>esp_crypto_hash_alg_t</code>: 定义了一些哈希算法,包括 MD5、SHA1、HMAC-MD5、HMAC-SHA1、SHA256 等。</li>
+<li><code>esp_crypto_cipher_alg_t</code>: 定义了一些对称加密算法,包括 NULL、AES、3DES、DES、RC2、RC4 等。</li>
+</ul>
+</li>
+<li>
+<p><strong>加密算法结构体</strong>:</p>
+<ul>
+<li><code>esp_crypto_hash_t</code>: 用于哈希算法的上下文结构体。</li>
+<li><code>esp_crypto_cipher_t</code>: 用于对称加密算法的上下文结构体。</li>
+</ul>
+</li>
+<li>
+<p><strong>WiFi 加密回调函数类型</strong>:</p>
+<ul>
+<li><code>esp_aes_128_encrypt_t</code>: AES-128 加密回调函数。</li>
+<li><code>esp_aes_128_decrypt_t</code>: AES-128 解密回调函数。</li>
+<li><code>esp_aes_wrap_t</code>: AES 密钥包装回调函数。</li>
+<li><code>esp_aes_unwrap_t</code>: AES 密钥解包回调函数。</li>
+<li><code>esp_hmac_sha256_vector_t</code>: HMAC-SHA256 向量散列回调函数。</li>
+<li><code>esp_sha256_prf_t</code>: SHA256 伪随机函数回调函数。</li>
+<li>一系列 HMAC-MD5、HMAC-SHA1 等散列回调函数。</li>
+<li><code>esp_sha1_prf_t</code>: SHA1 伪随机函数回调函数。</li>
+<li><code>esp_sha1_vector_t</code>: SHA1 向量散列回调函数。</li>
+<li><code>esp_pbkdf2_sha1_t</code>: 基于 SHA1 的 PBKDF2 密钥导出回调函数。</li>
+<li><code>esp_rc4_skip_t</code>: RC4 跳过流回调函数。</li>
+<li><code>esp_md5_vector_t</code>: MD5 向量散列回调函数。</li>
+<li>一系列 AES 加解密回调函数。</li>
+<li><code>esp_omac1_aes_128_t</code>: AES-128 OMAC1 散列回调函数。</li>
+<li><code>esp_ccmp_decrypt_t</code>: CCMP 解密回调函数。</li>
+<li><code>esp_ccmp_encrypt_t</code>: CCMP 加密回调函数。</li>
+<li><code>esp_aes_gmac_t</code>: AES GMAC 散列回调函数。</li>
+<li><code>esp_sha256_vector_t</code>: SHA256 向量散列回调函数。</li>
+<li><code>esp_crc32_le_t</code>: CRC32 Little-Endian 计算回调函数。</li>
+</ul>
+</li>
+<li>
+<p><strong>加密回调函数结构体</strong>:</p>
+<ul>
+<li><code>wpa_crypto_funcs_t</code>: 用于配置 WiFi 使用的加密回调函数的结构体。</li>
+<li><code>mesh_crypto_funcs_t</code>: 用于 Mesh 加密的回调函数结构体。</li>
+</ul>
+</li>
+</ol>
+<p>这个头文件主要定义了各种加密算法的回调函数类型,这些函数在 WiFi 和 Mesh 中都会使用到。这些回调函数可以是软件实现,也可以是硬件加速的实现。</p>
+<p>对于我们分析网络报文来说,这些加密算法相关的接口并不是最主要的,但是如果需要对加密的报文进行分析和解密,了解这些接口定义还是很有帮助的。</p>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="esp_wifi_defaulth-头文件定义了一些与默认-wifi-网络接口相关的功能"><code>esp_wifi_default.h</code> 头文件定义了一些与默认 WiFi 网络接口相关的功能:<a class="hash-link" aria-label="Enlace directo al esp_wifi_defaulth-头文件定义了一些与默认-wifi-网络接口相关的功能" title="Enlace directo al esp_wifi_defaulth-头文件定义了一些与默认-wifi-网络接口相关的功能" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces#esp_wifi_defaulth-头文件定义了一些与默认-wifi-网络接口相关的功能">​</a></h2>
+<ol>
+<li>
+<p><strong>接口定义</strong>:</p>
+<ul>
+<li><code>esp_netif_attach_wifi_station()</code>: 将 WiFi 站点接口附加到指定的 esp_netif 实例上。</li>
+<li><code>esp_netif_attach_wifi_ap()</code>: 将 WiFi AP 接口附加到指定的 esp_netif 实例上。</li>
+<li><code>esp_wifi_set_default_wifi_sta_handlers()</code>: 设置 WiFi 站点接口的默认事件处理程序。</li>
+<li><code>esp_wifi_set_default_wifi_ap_handlers()</code>: 设置 WiFi AP 接口的默认事件处理程序。</li>
+<li><code>esp_wifi_set_default_wifi_nan_handlers()</code>: 设置 WiFi NAN 接口的默认事件处理程序。</li>
+<li><code>esp_wifi_clear_default_wifi_driver_and_handlers()</code>: 清除指定 esp_netif 实例的默认 WiFi 事件处理程序。</li>
+</ul>
+</li>
+<li>
+<p><strong>默认网络接口创建</strong>:</p>
+<ul>
+<li><code>esp_netif_create_default_wifi_ap()</code>: 创建默认的 WiFi AP 网络接口。</li>
+<li><code>esp_netif_create_default_wifi_sta()</code>: 创建默认的 WiFi 站点网络接口。</li>
+<li><code>esp_netif_create_default_wifi_nan()</code>: 创建默认的 WiFi NAN 网络接口。</li>
+<li><code>esp_netif_destroy_default_wifi()</code>: 销毁使用 <code>esp_netif_create_default_wifi_*()</code> 创建的默认网络接口。</li>
+</ul>
+</li>
+<li>
+<p><strong>自定义网络接口创建</strong>:</p>
+<ul>
+<li><code>esp_netif_create_wifi()</code>: 根据自定义配置创建 WiFi 网络接口,但不注册默认事件处理程序。</li>
+</ul>
+</li>
+<li>
+<p><strong>Mesh 网络接口创建</strong>:</p>
+<ul>
+<li><code>esp_netif_create_default_wifi_mesh_netifs()</code>: 创建默认的 WiFi Mesh 站点和 AP 网络接口,禁用 DHCP 客户端和服务器。</li>
+</ul>
+</li>
+</ol>
+<p>总的来说,这个头文件提供了一些与 WiFi 网络接口相关的默认设置和创建功能,为上层应用程序提供了一些便利。在进行网络报文分析时,这些接口可能会起到辅助作用,比如在获取网络接口信息时使用。</p>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="esp_wifi_he_typesh-头文件定义了与-80211ax-he-相关的接口和数据结构"><code>esp_wifi_he_types.h</code> 头文件定义了与 802.11ax (HE) 相关的接口和数据结构:<a class="hash-link" aria-label="Enlace directo al esp_wifi_he_typesh-头文件定义了与-80211ax-he-相关的接口和数据结构" title="Enlace directo al esp_wifi_he_typesh-头文件定义了与-80211ax-he-相关的接口和数据结构" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces#esp_wifi_he_typesh-头文件定义了与-80211ax-he-相关的接口和数据结构">​</a></h2>
+<ol>
+<li>
+<p><strong>接口定义</strong>:</p>
+<ul>
+<li><code>esp_wifi_sta_itwt_setup()</code>: 设置或修改单播 TWT 协议。</li>
+<li><code>esp_wifi_sta_itwt_teardown()</code>: 拆除单播 TWT 协议。</li>
+<li><code>esp_wifi_sta_itwt_suspend()</code>: 暂停或恢复单播 TWT 协议。</li>
+<li><code>esp_wifi_sta_itwt_get_flow_id_status()</code>: 获取单播 TWT 协议的状态。</li>
+<li><code>esp_wifi_sta_itwt_send_probe_req()</code>: 发送探测请求以更新 TSF 时间。</li>
+<li><code>esp_wifi_sta_itwt_set_target_wake_time_offset()</code>: 设置 TWT 唤醒时间偏移。</li>
+<li><code>esp_wifi_enable_rx_statistics()</code>: 启用接收统计。</li>
+<li><code>esp_wifi_enable_tx_statistics()</code>: 启用发送统计。</li>
+<li><code>esp_wifi_sta_btwt_setup()</code>: 设置或修改广播 TWT 协议。</li>
+<li><code>esp_wifi_sta_btwt_teardown()</code>: 拆除广播 TWT 协议。</li>
+<li><code>esp_wifi_sta_get_btwt_num()</code>: 获取 AP 支持的广播 TWT 数量。</li>
+<li><code>esp_wifi_sta_btwt_get_info()</code>: 获取 AP 支持的广播 TWT 信息。</li>
+<li><code>esp_wifi_sta_twt_config()</code>: 设置 WiFi TWT 配置。</li>
+</ul>
+</li>
+<li>
+<p><strong>数据结构定义</strong>:</p>
+<ul>
+<li><code>wifi_itwt_setup_config_t</code>: 单播 TWT 协议设置参数。</li>
+<li><code>wifi_btwt_setup_config_t</code>: 广播 TWT 协议设置参数。</li>
+<li><code>esp_wifi_btwt_info_t</code>: 广播 TWT 协议信息。</li>
+<li><code>wifi_twt_config_t</code>: WiFi TWT 配置参数。</li>
+</ul>
+</li>
+</ol>
+<p>这些接口和数据结构主要与 802.11ax (HE) 协议中的 Target Wake Time (TWT) 机制相关。TWT 是在 WiFi 设备之间通过协商的方式确定唤醒时间,从而实现更好的功耗管理。</p>
+<p>在网络报文分析中,这些接口可能会帮助我们理解 WiFi 设备的功耗管理机制,分析 TWT 相关的报文细节。同时,获取 TWT 统计信息也可以为我们提供性能分析的依据。</p>
+<p>总的来说,这个头文件定义了一些 802.11ax 特有的功能接口,为我们提供了更丰富的 WiFi 分析能力。</p>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="esp_wifi_he_typesh-头文件定义了与-80211ax-he-相关的数据结构和枚举类型"><code>esp_wifi_he_types.h</code> 头文件定义了与 802.11ax (HE) 相关的数据结构和枚举类型:<a class="hash-link" aria-label="Enlace directo al esp_wifi_he_typesh-头文件定义了与-80211ax-he-相关的数据结构和枚举类型" title="Enlace directo al esp_wifi_he_typesh-头文件定义了与-80211ax-he-相关的数据结构和枚举类型" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces#esp_wifi_he_typesh-头文件定义了与-80211ax-he-相关的数据结构和枚举类型">​</a></h2>
+<ol>
+<li>
+<p><strong>枚举定义</strong>:</p>
+<ul>
+<li><code>esp_wifi_aci_t</code>: 访问类别</li>
+<li><code>esp_csi_acquire_stbc_mode_t</code>: CSI STBC 相关模式</li>
+<li><code>wifi_twt_setup_cmds_t</code>: TWT 设置命令</li>
+<li><code>he_su_gi_and_ltf_type_t</code>: HE SU 保护间隔和 LTF 类型</li>
+<li><code>wifi_rx_bb_format_t</code>: 接收帧的格  式</li>
+<li><code>wifi_btwt_setup_status_t</code>: 广播 TWT 设置状态</li>
+<li><code>wifi_itwt_teardown_status_t</code>: 单播 TWT 拆除状态</li>
+<li><code>wifi_btwt_teardown_status_t</code>: 广播 TWT 拆除状态</li>
+<li><code>wifi_itwt_probe_status_t</code>: 单播 TWT 探测状态</li>
+<li><code>wifi_twt_type_t</code>: TWT 类型</li>
+</ul>
+</li>
+<li>
+<p><strong>数据结构定义</strong>:</p>
+<ul>
+<li><code>wifi_csi_acquire_config_t</code>: CSI 采集配置</li>
+<li><code>esp_wifi_htc_omc_t</code>: HE 变体 HT 控制字段</li>
+<li><code>wifi_btwt_setup_config_t</code>: 广播 TWT 设置参数</li>
+<li><code>wifi_twt_setup_config_t</code>: 单播 TWT 设置参数 (别名 <code>wifi_itwt_setup_config_t</code>)</li>
+<li><code>wifi_event_sta_itwt_setup_t</code>: 单播 TWT 设置事件参数</li>
+<li><code>wifi_event_sta_itwt_teardown_t</code>: 单播 TWT 拆除事件参数</li>
+<li><code>wifi_event_sta_btwt_setup_t</code>: 广播 TWT 设置事件参数</li>
+<li><code>wifi_event_sta_btwt_teardown_t</code>: 广播 TWT 拆除事件参数</li>
+<li><code>wifi_event_sta_itwt_probe_t</code>: 单播 TWT 探测事件参数</li>
+<li><code>wifi_event_sta_itwt_suspend_t</code>: 单播 TWT 挂起事件参数</li>
+<li><code>wifi_twt_config_t</code>: TWT 配置参数</li>
+<li><code>wifi_event_sta_twt_wakeup_t</code>: TWT 唤醒事件参数</li>
+<li><code>esp_wifi_btwt_info_t</code>: 广播 TWT 信息</li>
+</ul>
+</li>
+</ol>
+<p>这些数据结构和枚举类型主要与 802.11ax (HE) 的新特性相关,如 TWT、CSI 采集等。</p>
+<p>对于网络报文分析来说,这些接口和数据结构可以帮助我们理解 HE 设备的一些新特性,比如 TWT 机制如何影响设备的功耗管理,CSI 采集配置如何影响信道测量等。通过分析这些参数,我们可以更好地分析 HE 设备的行为。</p>
+<p>总的来说,这个头文件定义了 802.11ax 相关的一些新概念和功能,为我们提供了分析 HE 设备网络报文的基础知识。</p>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="esp_wifi_netifh-头文件定义了-wifi-网络接口抽象层的一些接口"><code>esp_wifi_netif.h</code> 头文件定义了 WiFi 网络接口抽象层的一些接口:<a class="hash-link" aria-label="Enlace directo al esp_wifi_netifh-头文件定义了-wifi-网络接口抽象层的一些接口" title="Enlace directo al esp_wifi_netifh-头文件定义了-wifi-网络接口抽象层的一些接口" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces#esp_wifi_netifh-头文件定义了-wifi-网络接口抽象层的一些接口">​</a></h2>
+<ol>
+<li>
+<p><strong>常量定义</strong>:</p>
+<ul>
+<li><code>MAX_WIFI_IFS</code>: 定义了 WiFi 接口的最大数量, 与 <code>WIFI_IF_MAX</code> 相同。</li>
+</ul>
+</li>
+<li>
+<p><strong>数据类型定义</strong>:</p>
+<ul>
+<li><code>wifi_netif_driver_t</code>: WiFi 网络接口驱动程序的句柄类型。</li>
+</ul>
+</li>
+<li>
+<p><strong>接口定义</strong>:</p>
+<ul>
+<li><code>esp_wifi_create_if_driver()</code>: 创建一个 WiFi 网络接口驱动程序实例。</li>
+<li><code>esp_wifi_destroy_if_driver()</code>: 销毁一个 WiFi 网络接口驱动程序实例。</li>
+<li><code>esp_wifi_get_if_mac()</code>: 获取指定 WiFi 网络接口驱动程序实例的 MAC 地址。</li>
+<li><code>esp_wifi_is_if_ready_when_started()</code>: 检查 WiFi 网络接口驱动程序实例是否已准备就绪。</li>
+<li><code>esp_wifi_register_if_rxcb()</code>: 注册 WiFi 网络接口驱动程序实例的接收回调函数。</li>
+</ul>
+</li>
+</ol>
+<p>这个头文件定义了一些与 WiFi 网络接口驱动程序相关的接口,主要用于创建、销毁和管理 WiFi 网络接口实例,以及注册接收回调函数。</p>
+<p>这些接口主要用于在 ESP-NETIF 框架中管理 WiFi 网络接口。在进行网络报文分析时,可以利用这些接口获取和操作 WiFi 网络接口的相关信息,比如获取 MAC 地址、注册接收回调等。</p>
+<p>总的来说,这个头文件定义了一些抽象层的 WiFi 网络接口操作接口,为我们提 供了一种更高级的方式来管理和使用 WiFi 网络接口。</p>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="esp_wifi_typesh"><code>esp_wifi_types.h</code>:<a class="hash-link" aria-label="Enlace directo al esp_wifi_typesh" title="Enlace directo al esp_wifi_typesh" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces#esp_wifi_typesh">​</a></h2>
+<ul>
+<li>这个头文件包含了另一个头文件 <code>esp_wifi_types_generic.h</code>。</li>
+<li>如果存在 <code>esp_wifi_types_native.h</code> 头文件,它会被包含进来。否则,该头文件会定义一些不含任何实现的结构体类型,如 <code>wifi_csi_config_t</code> 和 <code>wifi_pkt_rx_ctrl_t</code>。</li>
+<li>这样做是为了在没有原生 Wi-Fi 支持的情况下,仍然可以编译使用一些常见的 Wi-Fi API。</li>
+</ul>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="smartconfig_ackh"><code>smartconfig_ack.h</code>:<a class="hash-link" aria-label="Enlace directo al smartconfig_ackh" title="Enlace directo al smartconfig_ackh" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces#smartconfig_ackh">​</a></h2>
+<ul>
+<li>这个头文件定义了两个函数:<!-- -->
+<ul>
+<li><code>sc_send_ack_start()</code>: 发送 SmartConfig 确认给手机。这个函数只能在收到 <code>SC_EVENT_GOT_SSID_PSWD</code> 事件时使用。</li>
+<li><code>sc_send_ack_stop()</code>: 停止发送 SmartConfig 确认给手机。</li>
+</ul>
+</li>
+<li>这些函数与 SmartConfig 功能相关,用于在 ESP 设备和手机应用程序之间进行确认。</li>
+</ul>
+<p>总的来说,这两个头文件提供了一些 Wi-Fi 和 SmartConfig 相关的类型定义和函数声明。其中 <code>esp_wifi_types.h</code> 头文件针对不同硬件平台的 Wi-Fi 支持情况做了兼容性处理,而 <code>smartconfig_ack.h</code> 则专注于 SmartConfig 功能的实现。这些头文件为 ESP-IDF 的 Wi-Fi 和 SmartConfig 相关功能提供了基础支持。</p>
+<h2 class="anchor anchorWithHideOnScrollNavbar_WYt5" id="esp_wifi_typesh-文件中的内容进行了全面的总结"><code>esp_wifi_types.h</code> 文件中的内容进行了全面的总结:<a class="hash-link" aria-label="Enlace directo al esp_wifi_typesh-文件中的内容进行了全面的总结" title="Enlace directo al esp_wifi_typesh-文件中的内容进行了全面的总结" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces#esp_wifi_typesh-文件中的内容进行了全面的总结">​</a></h2>
+<ol>
+<li>
+<p><strong>宏定义</strong>:</p>
+<ul>
+<li><code>__ESP_WIFI_TYPES_H__</code>: 文件的保护宏。</li>
+<li><code>WIFI_OFFCHAN_TX_REQ</code>: 表示一个离线信道传输请求。</li>
+<li><code>WIFI_OFFCHAN_TX_CANCEL</code>: 表示取消一个离线信道传输请求。</li>
+<li><code>WIFI_ROC_REQ</code>: 表示一个保持在信道上的请求。</li>
+<li><code>WIFI_ROC_CANCEL</code>: 表示取消一个保持在信道上的请求。</li>
+<li><code>WIFI_ACTIVE_SCAN_MIN_DEFAULT_TIME</code>: 主动扫描的最小默认时间。</li>
+<li><code>WIFI_ACTIVE_SCAN_MAX_DEFAULT_TIME</code>: 主动扫描的最大默认时间。</li>
+<li><code>WIFI_PASSIVE_SCAN_DEFAULT_TIME</code>: 被动扫描的默认时间。</li>
+<li><code>WIFI_SCAN_HOME_CHANNEL_DWELL_DEFAULT_TIME</code>: 在 home 信道停留的默认时间。</li>
+<li><code>WIFI_VENDOR_IE_ELEMENT_ID</code>: 供应商信息元素的 ID。</li>
+<li><code>WIFI_PROMIS_FILTER_MASK_*</code>: 混杂模式下不同数据包类型的过滤掩码。</li>
+<li><code>WIFI_EVENT_MASK_*</code>: WiFi 事件的掩码。</li>
+<li><code>WIFI_STATIS_BUFFER</code>: 统计缓冲区位掩码。</li>
+<li><code>WIFI_STATIS_RXTX</code>: 接收/发送统计位掩码。</li>
+<li><code>WIFI_STATIS_HW</code>: 硬件统计位掩码。</li>
+<li><code>WIFI_STATIS_DIAG</code>: 诊断统计位掩码。</li>
+<li><code>WIFI_STATIS_PS</code>: 功耗统计位掩码。</li>
+<li><code>WIFI_STATIS_ALL</code>: 所有统计位掩码。</li>
+<li><code>MAX_SSID_LEN</code>: SSID 的最大长度。</li>
+<li><code>MAX_PASSPHRASE_LEN</code>:   密码的最大长度。</li>
+<li><code>MAX_WPS_AP_CRED</code>: WPS 可接收的 AP 凭证数量。</li>
+<li><code>ESP_WIFI_NAN_MAX_SVC_SUPPORTED</code>: NAN 最大支持的服务数量。</li>
+<li><code>ESP_WIFI_NAN_DATAPATH_MAX_PEERS</code>: NAN 最大支持的对端数量。</li>
+<li><code>ESP_WIFI_NDP_ROLE_INITIATOR</code>: NAN 数据路径发起方角色。</li>
+<li><code>ESP_WIFI_NDP_ROLE_RESPONDER</code>: NAN 数据路径响应方角色。</li>
+<li><code>ESP_WIFI_MAX_SVC_NAME_LEN</code>: NAN 服务名称的最大长度。</li>
+<li><code>ESP_WIFI_MAX_FILTER_LEN</code>: NAN 服务过滤器的最大长度。</li>
+<li><code>ESP_WIFI_MAX_SVC_INFO_LEN</code>: NAN 服务信息的最大长度。</li>
+<li><code>ESP_WIFI_MAX_NEIGHBOR_REP_LEN</code>: 邻居报告的最大长度。</li>
+</ul>
+</li>
+<li>
+<p><strong>数据类型</strong>:</p>
+<ul>
+<li><code>wifi_mode_t</code>: WiFi 工作模式, 包括 STA、AP、APSTA 和 NAN 模式。</li>
+<li><code>wifi_interface_t</code>: WiFi 接口, 包括 STA、AP 和 NAN 接口。</li>
+<li><code>wifi_country_policy_t</code>: WiFi 国家/地区策略, 包括自动和手动。</li>
+<li><code>wifi_country_t</code>: WiFi 国家/地区的区域限制信息。</li>
+<li><code>wifi_auth_mode_t</code>: WiFi 认证模式, 从 OPEN 到 DPP。</li>
+<li><code>wifi_err_reason_t</code>: WiFi 断开连接的原因代码。</li>
+<li><code>wifi_second_chan_t</code>: WiFi 二级信道的状态, 包括 NONE、ABOVE 和 BELOW。</li>
+<li><code>wifi_scan_type_t</code>: WiFi 扫描类型, 包括主动扫描和被动扫描。</li>
+<li><code>wifi_active_scan_time_t</code>: 主动扫描的时间参数。</li>
+<li><code>wifi_scan_time_t</code>: 主动和被动扫描的时间参数。</li>
+<li><code>wifi_scan_channel_bitmap_t</code>: WiFi 扫描信道的位图。</li>
+<li><code>wifi_scan_config_t</code>: WiFi 扫描参数的结构体。</li>
+<li><code>wifi_scan_default_params_t</code>: 默认的 WiFi 扫描参数。</li>
+<li><code>wifi_cipher_type_t</code>: WiFi 加密类型。</li>
+<li><code>wifi_ant_t</code>: WiFi 天线的编号。</li>
+<li><code>wifi_he_ap_info_t</code>: 802.11ax AP 的相关信息。</li>
+<li><code>wifi_ap_record_t</code>: 扫描到的 AP 的详细信息。</li>
+<li><code>wifi_scan_method_t</code>: 两种扫描方法, 快速扫描和全信道扫描。</li>
+<li><code>wifi_sort_method_t</code>: AP 排序方法, 按信号强度或安全模式。</li>
+<li><code>wifi_scan_threshold_t</code>: 快速扫描的参数阈值。</li>
+<li><code>wifi_ps_type_t</code>: WiFi 功耗模式, 包括无电源保护、最小功耗和最大功耗。</li>
+<li><code>wifi_band_t</code>: WiFi 频段, 包括 2.4GHz 和 5GHz。</li>
+<li><code>wifi_band_mode_t</code>: WiFi 频段模式, 包括 2.4GHz 模式、5GHz 模式和自动模式。</li>
+<li><code>wifi_protocols_t</code>: 2.4GHz 和 5GHz 信道支持的协议。</li>
+<li><code>wifi_bandwidth_t</code>: 各种 WiFi 带宽。</li>
+<li><code>wifi_bandwidths_t</code>: 2.4GHz 和 5GHz 信道的带宽。</li>
+<li><code>wifi_pmf_config_t</code>: WiFi 管理帧保护的配置参数。</li>
+<li><code>wifi_sae_pwe_method_t</code>: SAE PWE 派生方法。</li>
+<li><code>wifi_sae_pk_mode_t</code>: SAE-PK 认证方法。</li>
+<li><code>wifi_ap_config_t</code>: AP 配置参数的结构体。</li>
+<li><code>wifi_sta_config_t</code>: STA 配置参数的结构体。</li>
+<li><code>wifi_nan_config_t</code>: NAN 发现配置参数的结构体。</li>
+<li><code>wifi_config_t</code>: AP、STA 和 NAN 配置的联合体。</li>
+<li><code>wifi_sta_info_t</code>: 连接到 AP 的 STA 的信息。</li>
+<li><code>wifi_storage_t</code>: WiFi 配置信息的存储位置, 包括 Flash 和 RAM。</li>
+<li><code>wifi_vendor_ie_type_t</code>: 供应商信息元素关联的帧类型。</li>
+<li><code>wifi_vendor_ie_id_t</code>: 供应商信息元素的索引。</li>
+<li><code>wifi_phy_mode_t</code>: 各种物理层模式, 如 11b、11g、HT20 等。</li>
+<li><code>vendor_ie_data_t</code>: 供应商信息元素的数据结构。</li>
+<li><code>wifi_promiscuous_pkt_type_t</code>: 混杂模式下接收数据包的类型。</li>
+<li><code>wifi_promiscuous_filter_t</code>: 混杂模式下的数据包过滤掩码。</li>
+<li><code>wifi_event_t</code>: 各种 WiFi 事件类型。</li>
+<li><code>wifi_event_sta_scan_done_t</code>: WIFI_EVENT_SCAN_DONE 事件的参数。</li>
+<li><code>wifi_event_sta_connected_t</code>: WIFI_EVENT_STA_CONNECTED 事件的参数。</li>
+<li><code>wifi_event_sta_disconnected_t</code>: WIFI_EVENT_STA_DISCONNECTED 事件的参数。</li>
+<li><code>wifi_event_sta_authmode_change_t</code>: WIFI_EVENT_STA_AUTHMODE_CHANGE 事件的参数。</li>
+<li><code>wifi_event_sta_wps_er_pin_t</code>: WIFI_EVENT_STA_WPS_ER_PIN 事件的参数。</li>
+<li><code>wifi_event_sta_wps_fail_reason_t</code>: WIFI_EVENT_STA_WPS_ER_FAILED 事件的参数。</li>
+<li><code>wifi_event_sta_wps_er_success_t</code>: WIFI_EVENT_STA_WPS_ER_SUCCESS 事件的参数。</li>
+<li><code>wifi_event_ap_staconnected_t</code>: WIFI_EVENT_AP_STACONNECTED 事件的参数。</li>
+<li><code>wifi_event_ap_stadisconnected_t</code>: WIFI_EVENT_AP_STADISCONNECTED 事件的参数。</li>
+<li><code>wifi_event_ap_probe_req_rx_t</code>: WIFI_EVENT_AP_PROBEREQRECVED 事件的参数。</li>
+<li><code>wifi_event_bss_rssi_low_t</code>: WIFI_EVENT_STA_BSS_RSSI_LOW 事件的参数。</li>
+<li><code>wifi_event_home_channel_change_t</code>: WIFI_EVENT_HOME_CHANNEL_CHANGE 事件的参数。</li>
+<li><code>wifi_ftm_status_t</code>: FTM 操作状态类型。</li>
+<li><code>wifi_ftm_report_entry_t</code>: FTM 报告条目。</li>
+<li><code>wifi_event_ftm_report_t</code>: WIFI_EVENT_FTM_REPORT 事件的参数。</li>
+<li><code>wifi_event_action_tx_status_t</code>: WIFI_EVENT_ACTION_TX_STATUS 事件的参数。</li>
+<li><code>wifi_event_roc_done_t</code>: WIFI_EVENT_ROC_DONE 事件的参数。</li>
+<li><code>wifi_event_ap_wps_rg_pin_t</code>: WIFI_EVENT_AP_WPS_RG_PIN 事件的参数。</li>
+<li><code>wps_fail_reason_t</code>: AP WPS 失败的原因。</li>
+<li><code>wifi_event_ap_wps_rg_fail_reason_t</code>: WIFI_EVENT_AP_WPS_RG_FAILED 事件的参数。</li>
+<li><code>wifi_event_ap_wps_rg_success_t</code>: WIFI_EVENT_AP_WPS_RG_SUCCESS 事件的参数。</li>
+<li><code>wifi_event_nan_svc_match_t</code>: WIFI_EVENT_NAN_SVC_MATCH 事件的参数。</li>
+<li><code>wifi_event_nan_replied_t</code>: WIFI_EVENT_NAN_REPLIED 事件的参数。</li>
+<li><code>wifi_event_nan_receive_t</code>: WIFI_EVENT_NAN_RECEIVE 事件的参数。</li>
+<li><code>wifi_event_ndp_indication_t</code>: WIFI_EVENT_NDP_INDICATION 事件的参数。</li>
+<li><code>wifi_event_ndp_confirm_t</code>: WIFI_EVENT_NDP_CONFIRM 事件的参数。</li>
+<li><code>wifi_event_ndp_terminated_t</code>: WIFI_EVENT_NDP_TERMINATED 事件的参数。</li>
+<li><code>wifi_event_neighbor_report_t</code>: WIFI_EVENT_STA_NEIGHBOR_REP 事件的参数。</li>
+<li><code>wifi_ant_gpio_t</code>: WiFi 天线 GPIO 配置。</li>
+<li><code>wifi_ant_gpio_config_t</code>: 一组 WiFi 天线 GPIO 配置。</li>
+<li><code>wifi_ant_mode_t</code>: WiFi 天线模式。</li>
+<li><code>wifi_ant_config_t</code>: WiFi 天线配置。</li>
+<li><code>wifi_action_tx_req_t</code>: 发送 Action 帧的请求。</li>
+<li><code>wifi_ftm_initiator_cfg_t</code>: FTM 发起方的配置。</li>
+<li><code>wifi_nan_service_type_t</code>: NAN 服务的类型。</li>
+<li><code>wifi_nan_publish_cfg_t</code>: NAN 发布服务的配置参数。</li>
+<li><code>wifi_nan_subscribe_cfg_t</code>: NAN 订阅服务的配置参数。</li>
+<li><code>wifi_nan_followup_params_t</code>: NAN 跟踪消息的参数。</li>
+<li><code>wifi_nan_datapath_req_t</code>: NAN 数据路径请求的参数。</li>
+<li><code>wifi_nan_datapath_resp_t</code>: NAN 数据路径响应的参数。</li>
+<li><code>wifi_nan_datapath_end_req_t</code>: NAN 数据路径结束请求的参数。</li>
+<li><code>wifi_phy_rate_t</code>: 不同的 WiFi 物理层速率。</li>
+</ul>
+</li>
+<li>
+<p><strong>函数接口</strong>:
+该头文件主要定义了数据类型和常量, 没有直接定义函数接口。相关的函数接口定义在其他头文件中, 如 <code>esp_wifi.h</code>。</p>
+</li>
+</ol>
+<p>总的来说, <code>esp_wifi_types.h</code> 提供了大量的 WiFi 相关数据类型和常量定义, 为上层应用程序提供了全面的配置和控制接口。</p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-tags-row"><div class="col"><b>Etiquetas:</b><ul class="tags_jXut padding--none margin-left--sm"><li class="tag_QGVx"><a class="tag_zVej tagRegular_sFm0" href="/tags/esp-32">esp32</a></li><li class="tag_QGVx"><a class="tag_zVej tagRegular_sFm0" href="/tags/esp-idf">esp-idf</a></li><li class="tag_QGVx"><a class="tag_zVej tagRegular_sFm0" href="/tags/wifi">wifi</a></li><li class="tag_QGVx"><a class="tag_zVej tagRegular_sFm0" href="/tags/networking">networking</a></li><li class="tag_QGVx"><a class="tag_zVej tagRegular_sFm0" href="/tags/embedded-development">embedded development</a></li></ul></div></div><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col"><a href="https://github.com/tianrking/tianrking.github.io/tree/V3.4/docs/micro-controladores/ESP32/esp-idf5.3_sdk.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Editar esta página</a></div><div class="col lastUpdated_JAkA"><span class="theme-last-updated">Última actualización<!-- --> en <b><time datetime="2024-08-22T02:04:59.000Z" itemprop="dateModified">22 ago 2024</time></b></span></div></div></footer></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Página del documento"><a class="pagination-nav__link pagination-nav__link--prev" href="/micro-controladores/STM32/desarrollo-cdc-stm32cubemx"><div class="pagination-nav__sublabel">Anterior</div><div class="pagination-nav__label">Desarrollo de comunicación CDC con STM32CubeMX</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/micro-controladores/ESP32/esp32-programming-examples-guide"><div class="pagination-nav__sublabel">Siguiente</div><div class="pagination-nav__label">ESP32 編程示例指南 | Guía de Ejemplos de Programación para ESP32</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a class="table-of-contents__link toc-highlight" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces#esp_nowh-头文件中的所有接口包括形参返回值等信息"><code>esp_now.h</code> 头文件中的所有接口,包括形参、返回值等信息:</a></li><li><a class="table-of-contents__link toc-highlight" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces#esp_smartconfigh-头文件的内容"><code>esp_smartconfig.h</code> 头文件的内容:</a></li><li><a class="table-of-contents__link toc-highlight" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces#esp_meshh-头文件的内容"><code>esp_mesh.h</code> 头文件的内容:</a></li><li><a class="table-of-contents__link toc-highlight" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces#esp_mesh_internalh-头文件定义了一些-mesh-内部的数据结构和函数"><code>esp_mesh_internal.h</code> 头文件定义了一些 Mesh 内部的数据结构和函数:</a></li><li><a class="table-of-contents__link toc-highlight" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces#esp_wifih-头文件定义了-esp-idf-wi-fi-编程的各种接口和功能"><code>esp_wifi.h</code> 头文件定义了 ESP-IDF Wi-Fi 编程的各种接口和功能:</a></li><li><a class="table-of-contents__link toc-highlight" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces#esp_wifi_ap_get_sta_listh-头文件定义了一些与-wi-fi-相关的数据类型和宏定义"><code>esp_wifi_ap_get_sta_list.h</code> 头文件定义了一些与 Wi-Fi 相关的数据类型和  宏定义:</a></li><li><a class="table-of-contents__link toc-highlight" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces#esp_wifi_crypto_typesh-头文件定义了一些与-wifi-加密相关的数据结构和回调函数类型"><code>esp_wifi_crypto_types.h</code> 头文件定义了一些与 WiFi 加密相关的数据结构和回调函数类型:</a></li><li><a class="table-of-contents__link toc-highlight" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces#esp_wifi_defaulth-头文件定义了一些与默认-wifi-网络接口相关的功能"><code>esp_wifi_default.h</code> 头文件定义了一些与默认 WiFi 网络接口相关的功能:</a></li><li><a class="table-of-contents__link toc-highlight" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces#esp_wifi_he_typesh-头文件定义了与-80211ax-he-相关的接口和数据结构"><code>esp_wifi_he_types.h</code> 头文件定义了与 802.11ax (HE) 相关的接口和数据结构:</a></li><li><a class="table-of-contents__link toc-highlight" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces#esp_wifi_he_typesh-头文件定义了与-80211ax-he-相关的数据结构和枚举类型"><code>esp_wifi_he_types.h</code> 头文件定义了与 802.11ax (HE) 相关的数据结构和枚举类型:</a></li><li><a class="table-of-contents__link toc-highlight" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces#esp_wifi_netifh-头文件定义了-wifi-网络接口抽象层的一些接口"><code>esp_wifi_netif.h</code> 头文件定义了 WiFi 网络接口抽象层的一些接口:</a></li><li><a class="table-of-contents__link toc-highlight" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces#esp_wifi_typesh"><code>esp_wifi_types.h</code>:</a></li><li><a class="table-of-contents__link toc-highlight" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces#smartconfig_ackh"><code>smartconfig_ack.h</code>:</a></li><li><a class="table-of-contents__link toc-highlight" href="/micro-controladores/ESP32/esp32-idf-5.3-wifi-interfaces#esp_wifi_typesh-文件中的内容进行了全面的总结"><code>esp_wifi_types.h</code> 文件中的内容进行了全面的总结:</a></li></ul></div></div></div></div></main></div></div></div><footer class="footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/docs/intro">Tutorial</a></li></ul></div><div class="col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://stackoverflow.com/questions/tagged/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item">Stack Overflow<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://discordapp.com/invite/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item">Discord<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li><li class="footer__item"><a href="https://twitter.com/docusaurus" target="_blank" rel="noopener noreferrer" class="footer__link-item">Twitter<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div><div class="col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/blog">Blog</a></li><li class="footer__item"><a href="https://github.com/tianrking/tianrking.github.io" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-hidden="true" viewBox="0 0 24 24" class="iconExternalLink_nPIU"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2025 w0x7ce. Thanks @meta</div></div></div></footer></div>
+</body>
+</html>
